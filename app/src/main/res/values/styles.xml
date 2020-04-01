@@ -1,0 +1,45 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorControlHighlight">@color/colorControlHighlight</item>
+    </style>
+
+    <style name="Toolbar" parent="ThemeOverlay.MaterialComponents.Light">
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="Toolbar.TextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="fontFamily">@font/montserrat</item>
+    </style>
+
+    <style name="Currency" />
+
+    <style name="Currency.RecyclerView">
+        <item name="android:clipChildren">false</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:splitMotionEvents">false</item>
+        <item name="android:layoutAnimation">@anim/layout_animation_fall_down</item>
+    </style>
+
+    <style name="Currency.EditText">
+        <item name="backgroundTint">@color/currency_edit_text_selector</item>
+        <item name="android:digits">@string/currency_text_digits</item>
+        <item name="android:ellipsize">end</item>
+        <item name="fontFamily">@font/montserrat</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:inputType">number|numberDecimal|phone</item>
+        <item name="android:maxLength">9</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textAlignment">textEnd</item>
+        <item name="android:longClickable">false</item>
+    </style>
+
+</resources>

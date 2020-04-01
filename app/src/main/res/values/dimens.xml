@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Common dimensions -->
+    <dimen name="spacing_large">16dp</dimen>
+    <dimen name="spacing_medium">12dp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_none">0dp</dimen>
+
+    <dimen name="text_size_large">16sp</dimen>
+
+    <!-- Currency -->
+    <dimen name="currency_thumbnail_width">50dp</dimen>
+    <dimen name="currency_thumbnail_height">50dp</dimen>
+
+    <dimen name="currency_long_name_margin_bottom">2dp</dimen>
+</resources>

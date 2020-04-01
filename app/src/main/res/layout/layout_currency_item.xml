@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="rate"
+            type="io.github.nuhkoca.libbra.data.model.view.RateViewItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingStart="@dimen/spacing_large"
+        android:paddingTop="@dimen/spacing_small"
+        android:paddingEnd="@dimen/spacing_large"
+        android:paddingBottom="@dimen/spacing_small">
+
+        <ImageView
+            android:id="@+id/ivCurrencyThumbnail"
+            android:layout_width="@dimen/currency_thumbnail_width"
+            android:layout_height="@dimen/currency_thumbnail_height"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:src="@{rate.icon}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_aud" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCurrencyShort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_medium"
+            android:fontFamily="@font/montserrat_bold"
+            android:includeFontPadding="false"
+            android:text="@{rate.abbreviation}"
+            android:textAllCaps="true"
+            app:firstBaselineToTopHeight="@dimen/spacing_none"
+            app:layout_constraintBottom_toTopOf="@+id/tvCurrencyLong"
+            app:layout_constraintStart_toEndOf="@+id/ivCurrencyThumbnail"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="AUD" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCurrencyLong"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/currency_long_name_margin_bottom"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="@{rate.longName}"
+            android:textAllCaps="false"
+            app:firstBaselineToTopHeight="@dimen/spacing_none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/barrier"
+            app:layout_constraintStart_toStartOf="@+id/tvCurrencyShort"
+            app:layout_constraintTop_toBottomOf="@+id/tvCurrencyShort"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintWidth_percent="0.45"
+            tools:text="Australian Dollar" />
+
+        <io.github.nuhkoca.libbra.util.widget.CurrencyEditText
+            android:id="@+id/tietCurrency"
+            android:layout_width="@dimen/spacing_none"
+            android:layout_height="wrap_content"
+            android:clickable="@{rate.id == 0}"
+            android:focusable="@{rate.id == 0}"
+            android:focusableInTouchMode="@{rate.id == 0}"
+            android:text="@{rate.amount}"
+            android:theme="@style/Currency.EditText"
+            app:layout_constraintBottom_toBottomOf="@id/ivCurrencyThumbnail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvCurrencyLong"
+            app:layout_constraintTop_toTopOf="@id/ivCurrencyThumbnail"
+            tools:text="200,13" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="tvCurrencyLong, tvCurrencyShort" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

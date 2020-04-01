@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Currency EditText -->
+    <color name="currency_edit_text_underline_color">#FFFFFF</color>
+</resources>
