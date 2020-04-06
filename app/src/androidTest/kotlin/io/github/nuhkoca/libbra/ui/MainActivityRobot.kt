@@ -23,6 +23,8 @@ import io.github.nuhkoca.libbra.R
 
 /**
  * Robot pattern to verify [MainActivity]'s assertions in [MainActivityTest]
+ *
+ * Credit: https://academy.realm.io/posts/kau-jake-wharton-testing-robots/
  */
 fun launchMain(func: MainActivityRobot.() -> Unit) = MainActivityRobot().apply { func() }
 

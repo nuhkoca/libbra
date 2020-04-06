@@ -43,15 +43,15 @@ class MainActivityTest {
         IdlingRegistry.getInstance().register(dataBindingIdlingResource)
     }
 
-    @After
-    fun unregisterIdlingResources() {
-        IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
-    }
-
     @Test
     fun activityLaunchesAndToolbarIsDisplayed() {
         launchMain {
             verifyToolbar()
         }
+    }
+
+    @After
+    fun unregisterIdlingResources() {
+        IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
     }
 }

@@ -131,9 +131,23 @@ jobs:
       - name: Unit Tests
         run: ./gradlew testDebugUnitTest :rules:test # lint tests requires this task
 
-      - name: Instrumentation Test
-        uses: reactivecircus/android-emulator-runner@v2
+  ui-test:
+    needs: test
+    name: Instrumentation Test
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # Restore the cache.
+      # Intentionally don't set 'restore-keys' so the cache never contains redundant dependencies.
+      - uses: actions/cache@v1
         with:
-          api-level: 29
-          arch: x86_64
-          script: ./gradlew connectedDebugAndroidTest
+          path: ~/.gradle/caches
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle.kts') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }} }}
+
+      - name: Instrumentation Tests
+        uses: reactivecircus/android-emulator-runner@v2
+          with:
+            api-level: 29
+            arch: x86_64
+            script: ./gradlew connectedDebugAndroidTest

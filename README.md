@@ -1,5 +1,5 @@
 ## Libbra
-![GitHub Actions status](https://github.com/nuhkoca/revolut-task-libbra/workflows/Libbra/badge.svg)
+![Libbra](https://github.com/nuhkoca/revolut-task-libbra/workflows/Libbra/badge.svg)
 [![CodeStyle](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 [![Kotlin Version](https://img.shields.io/badge/kotlin-1.3.61-blue.svg)](http://kotlinlang.org/)
 [![Gradle](https://lv.binarybabel.org/catalog-api/gradle/latest.svg)](https://lv.binarybabel.org/catalog/gradle/latest)
@@ -21,7 +21,7 @@ long application lifecycle management.
 -   [Design](https://github.com/nuhkoca/revolut-task-libbra#design)
 -   [Architecture](https://github.com/nuhkoca/revolut-task-libbra#architecture)
 -   [Tech-stack](https://github.com/nuhkoca/revolut-task-libbra#tech-stack)
--   [Author](https://github.com/nuhkoca/revolut-task-libbra#authors)
+-   [Author](https://github.com/nuhkoca/revolut-task-libbra#author)
 -   [License](https://github.com/nuhkoca/revolut-task-libbra#license)
 
 ## Development
@@ -33,7 +33,7 @@ First off, you require the latest Android Studio 3.6.0 (or newer) to be able to 
 Moreover, to sign your app for release, please refer to `keystore.properties` to find required fields.
 
 ```properties
-#Signing Config
+# Signing Config
 signing.store.password=<look>
 signing.key.password=<look>
 signing.key.alias=<look>
@@ -161,7 +161,7 @@ This project takes advantage of many popular libraries, plugins and tools of the
 -   [JUnit5](https://github.com/mannodermaus/android-junit5) - a Gradle plugin that allows for the execution of JUnit5 tests in Android environments using Android Gradle Plugin 3.5.0 or later.
 -   [and more...](https://github.com/nuhkoca/revolut-task-libbra/blob/master/buildSrc/src/main/kotlin/plugins/BuildPlugins.kt)
 
-## Authors
+## Author
 
 <a href="https://twitter.com/_nuhkoca" target="_blank">
   <img src="https://avatars0.githubusercontent.com/u/5719389?s=460&u=38c806173de440d6e307215b3befd588a918ad91&v=4" width="70" align="left">
@@ -176,8 +176,8 @@ This project takes advantage of many popular libraries, plugins and tools of the
 
 ## License
 
-* The preview images were created using 'Previewed' at previewed.app
-* The currency and application icons were created at iconscout.com
+* The preview images were created using 'Previewed' at [Previewed](https://previewed.app/)
+* The currency and application icons were created at [Iconscout](https://iconscout.com/)
 
 ```license
 Copyright 2020 Nuh Koca

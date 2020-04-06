@@ -37,7 +37,7 @@ class DefaultDispatcherProviderTest {
      * @param dispatcher represents any [CoroutineDispatcher]
      */
     @ParameterizedTest
-    @ArgumentsSource(CustomArgumentsProvider::class)
+    @ArgumentsSource(DispatcherArgumentsProvider::class)
     fun `any dispatcher should not be null`(dispatcher: CoroutineDispatcher) {
         assertThat(dispatcher).isNotNull()
     }
@@ -46,7 +46,7 @@ class DefaultDispatcherProviderTest {
 /**
  * A custom [ArgumentsProvider] to have any [CoroutineDispatcher] parameterized in tests.
  */
-private class CustomArgumentsProvider : ArgumentsProvider {
+private class DispatcherArgumentsProvider : ArgumentsProvider {
 
     private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider()
 
