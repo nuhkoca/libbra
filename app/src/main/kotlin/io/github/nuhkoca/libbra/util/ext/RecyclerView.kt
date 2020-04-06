@@ -19,6 +19,7 @@ package io.github.nuhkoca.libbra.util.ext
 
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import io.github.nuhkoca.libbra.util.delegates.LifecycleAwareScrollListener
 import io.github.nuhkoca.libbra.util.delegates.LifecycleAwareTouchListener
 
 /**
@@ -29,3 +30,14 @@ import io.github.nuhkoca.libbra.util.delegates.LifecycleAwareTouchListener
 fun RecyclerView.addLifecycleAwareTouchListener(fragment: Fragment) {
     LifecycleAwareTouchListener(fragment, this)
 }
+
+/**
+ * Adds lifecycle aware scroll listener to target [Fragment].
+ *
+ * @param fragment The target fragment
+ * @param onStateChanged The callback that holds RecyclerView scroll state
+ */
+fun RecyclerView.addLifecycleAwareScrollListener(
+    fragment: Fragment,
+    onStateChanged: (newState: Int) -> Unit
+) = LifecycleAwareScrollListener(fragment, this, onStateChanged)

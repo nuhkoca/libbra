@@ -29,11 +29,11 @@ import io.github.nuhkoca.libbra.data.succeeded
 import io.github.nuhkoca.libbra.domain.usecase.CurrencyParams
 import io.github.nuhkoca.libbra.domain.usecase.UseCase
 import io.github.nuhkoca.libbra.ui.di.MainScope
+import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation
 import io.github.nuhkoca.libbra.util.coroutines.DispatcherProvider
 import io.github.nuhkoca.libbra.util.mapper.Mapper
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.mapLatest
 import javax.inject.Inject
 
 @MainScope
@@ -44,37 +44,46 @@ class CurrencyViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val baseCurrencyLiveData = MutableLiveData<Rate>()
+    private val continuationLiveData = MutableLiveData<Continuation>()
 
     private val _currencyLiveData = MutableLiveData<CurrencyViewState>()
 
     val currencyLiveData: LiveData<CurrencyViewState> =
-        Transformations.switchMap(baseCurrencyLiveData, ::getCurrencyList)
+        Transformations.switchMap(baseCurrencyLiveData) { rate ->
+            Transformations.switchMap(continuationLiveData) { continuation ->
+                getCurrencyList(rate, continuation)
+            }
+        }
 
     init {
+        setContinuation(true)
         setBaseCurrency(Rate.EUR)
+    }
+
+    fun setContinuation(isContinue: Boolean) = apply {
+        continuationLiveData.value = if (isContinue) Continuation.RESUME else Continuation.PAUSE
     }
 
     fun setBaseCurrency(base: Rate) = apply { baseCurrencyLiveData.value = base }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun getCurrencyList(base: Rate = Rate.EUR): LiveData<CurrencyViewState> {
-        return currencyUseCase.execute(CurrencyParams(base))
-            .flatMapLatest { result ->
-                flow {
-                    if (result.succeeded) {
-                        result as Result.Success
-                        val viewItem = mapper.map(result.data)
-                        emit(currentViewState.copy(data = viewItem, isLoading = false))
-                    } else {
-                        result as Result.Error
-                        emit(
-                            currentViewState.copy(
-                                isLoading = false,
-                                hasError = true,
-                                errorMessage = result.failure.message
-                            )
-                        )
-                    }
+    private fun getCurrencyList(
+        base: Rate = Rate.EUR,
+        continuation: Continuation = Continuation.RESUME
+    ): LiveData<CurrencyViewState> {
+        return currencyUseCase.execute(CurrencyParams(base, continuation))
+            .mapLatest { result ->
+                return@mapLatest if (result.succeeded) {
+                    result as Result.Success
+                    val viewItem = mapper.map(result.data)
+                    currentViewState.copy(data = viewItem, isLoading = false)
+                } else {
+                    result as Result.Error
+                    currentViewState.copy(
+                        isLoading = false,
+                        hasError = true,
+                        errorMessage = result.failure.message
+                    )
                 }
             }.asLiveData(dispatcherProvider.io + viewModelScope.coroutineContext)
     }

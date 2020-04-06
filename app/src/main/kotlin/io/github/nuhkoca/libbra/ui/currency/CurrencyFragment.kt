@@ -23,16 +23,29 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.navigation.navGraphViewModels
+import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import io.github.nuhkoca.libbra.R
 import io.github.nuhkoca.libbra.data.enums.Rate
 import io.github.nuhkoca.libbra.databinding.FragmentCurrencyBinding
 import io.github.nuhkoca.libbra.ui.di.MainScope
 import io.github.nuhkoca.libbra.util.event.SingleLiveEvent
+import io.github.nuhkoca.libbra.util.ext.addLifecycleAwareScrollListener
 import io.github.nuhkoca.libbra.util.ext.addLifecycleAwareTouchListener
+import io.github.nuhkoca.libbra.util.ext.show
 import io.github.nuhkoca.libbra.util.ext.snackBar
 import io.github.nuhkoca.libbra.util.ext.viewBinding
+import io.github.nuhkoca.libbra.util.keyboard.KeyboardState
+import io.github.nuhkoca.libbra.util.keyboard.KeyboardStateLiveData
+import io.github.nuhkoca.libbra.util.keyboard.bindKeyboardStateEvents
 import javax.inject.Inject
 
+/*
+ * Cannot test this class along with FragmentFactory and navGraphViewModels delegation. If I don't
+ * use FragmentFactory and init viewModel with viewModels delegations I am able to test. However,
+ * I didn't want to change the whole logic.
+ *
+ * Issue tracker: https://issuetracker.google.com/issues/153364901
+ */
 @MainScope
 class CurrencyFragment @Inject constructor(
     private val viewModelFactory: ViewModelProvider.Factory,
@@ -53,15 +66,22 @@ class CurrencyFragment @Inject constructor(
                 viewModel.setBaseCurrency(Rate.valueOf(currency))
                 binding.rvCurrency.scrollToPosition(0)
             })
-            binding.rvCurrency.setHasFixedSize(true)
-            binding.rvCurrency.adapter = currencyAdapter
-            binding.rvCurrency.addLifecycleAwareTouchListener(this@CurrencyFragment)
+            setupRecyclerView()
+            KeyboardStateLiveData.state.observe(viewLifecycleOwner, onChanged = { state ->
+                viewModel.setContinuation(state == KeyboardState.CLOSED)
+            })
+            bindKeyboardStateEvents()
+            observeViewModel()
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        observeViewModel()
+    private fun setupRecyclerView() = with(binding.rvCurrency) {
+        setHasFixedSize(true)
+        adapter = currencyAdapter
+        addLifecycleAwareTouchListener(this@CurrencyFragment)
+        addLifecycleAwareScrollListener(this@CurrencyFragment) { state ->
+            viewModel.setContinuation(state == SCROLL_STATE_IDLE)
+        }
     }
 
     private fun observeViewModel() = with(viewModel) {
@@ -74,6 +94,7 @@ class CurrencyFragment @Inject constructor(
             }
             state.data?.let {
                 currencyAdapter.submitList(it.rates)
+                binding.rvCurrency.show()
                 if (animate) binding.rvCurrency.scheduleLayoutAnimation()
                 animate = false
             }

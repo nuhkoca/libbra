@@ -25,6 +25,7 @@ import io.github.nuhkoca.libbra.data.shared.rule.CoroutinesTestRule
 import io.github.nuhkoca.libbra.domain.repository.Repository
 import io.github.nuhkoca.libbra.shared.assertion.test
 import io.github.nuhkoca.libbra.shared.ext.runBlockingTest
+import io.github.nuhkoca.libbra.util.coroutines.AsyncManager
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -32,12 +33,16 @@ import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 
+/**
+ * A test class for [CurrencyUseCase]
+ */
 @RunWith(MockitoJUnitRunner::class)
 @MediumTest
 class CurrencyUseCaseTest : BaseTestClass() {
@@ -73,7 +78,7 @@ class CurrencyUseCaseTest : BaseTestClass() {
     override fun setUp() {
         super.setUp()
 
-        every { repository.getCurrencyList(capture(currencySlot)) } answers {
+        every { repository.getCurrencyList(capture(currencySlot), any()) } answers {
             flowOf(Result.Success(currencyResponse))
         }
 
@@ -103,7 +108,27 @@ class CurrencyUseCaseTest : BaseTestClass() {
             expectComplete()
         }
 
-        verify(exactly = 1) { repository.getCurrencyList(any()) }
+        verify(exactly = 1) { repository.getCurrencyList(any(), any()) }
         confirmVerified(repository)
     }
+
+    @Test
+    @ExperimentalCoroutinesApi
+    fun `network process should not happen in case of pause`() =
+        coroutinesTestRule.runBlockingTest {
+            // Given
+            val base = Rate.HRK
+            val continuation = AsyncManager.Continuation.PAUSE
+
+            // When
+            every { repository.getCurrencyList(capture(currencySlot), any()) } answers {
+                emptyFlow()
+            }
+            val flow = useCase.execute(CurrencyParams(base, continuation))
+
+            // Then
+            flow.test {
+                expectComplete()
+            }
+        }
 }

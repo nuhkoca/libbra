@@ -26,6 +26,7 @@ import io.github.nuhkoca.libbra.data.service.CurrencyService
 import io.github.nuhkoca.libbra.data.shared.rule.CoroutinesTestRule
 import io.github.nuhkoca.libbra.shared.assertion.test
 import io.github.nuhkoca.libbra.shared.ext.runBlockingTest
+import io.github.nuhkoca.libbra.util.coroutines.AsyncManager
 import io.github.nuhkoca.libbra.util.mapper.Mapper
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder
@@ -102,9 +103,10 @@ class CurrencyRemoteDataSourceTest : BaseTestClass() {
     fun `data source should return data`() = coroutinesTestRule.runBlockingTest {
         // Given
         val base = Rate.CNY
+        val continuation = AsyncManager.Continuation.RESUME
 
         // When
-        val flow = dataSource.getCurrencyList(base)
+        val flow = dataSource.getCurrencyList(base, continuation)
 
         // Then
         flow.test {
@@ -131,4 +133,21 @@ class CurrencyRemoteDataSourceTest : BaseTestClass() {
         confirmVerified(currencyService)
         confirmVerified(mapper)
     }
+
+    @Test
+    @ExperimentalCoroutinesApi
+    fun `network process should not happen in case of pause`() =
+        coroutinesTestRule.runBlockingTest {
+            // Given
+            val base = Rate.CNY
+            val continuation = AsyncManager.Continuation.PAUSE
+
+            // When
+            val flow = dataSource.getCurrencyList(base, continuation)
+
+            // Then
+            flow.test {
+                expectComplete()
+            }
+        }
 }

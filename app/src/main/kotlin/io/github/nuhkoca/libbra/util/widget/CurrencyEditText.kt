@@ -45,9 +45,10 @@ class CurrencyEditText @JvmOverloads constructor(
         override fun afterTextChanged(s: Editable) {
             if (isEditing) return
             isEditing = true
-            val formattedAmount = parseText(s.toString())
-            setText(formatText(formattedAmount))
-            setSelection(length())
+            val parsedAmount = parseText(s.toString())
+            val formattedAmount = formatText(parsedAmount)
+            setText(formattedAmount)
+            setSelection(formattedAmount.length)
             isEditing = false
         }
 

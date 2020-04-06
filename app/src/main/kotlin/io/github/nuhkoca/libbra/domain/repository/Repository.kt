@@ -19,6 +19,8 @@ import io.github.nuhkoca.libbra.data.Result
 import io.github.nuhkoca.libbra.data.datasource.DataSource
 import io.github.nuhkoca.libbra.data.enums.Rate
 import io.github.nuhkoca.libbra.data.model.domain.CurrencyResponse
+import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation
+import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation.RESUME
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -30,9 +32,10 @@ interface Repository {
     /**
      * Fetches list of currencies and returns in [Flow] builder
      *
+     * @param continuation indicates flow state. If [RESUME] flow is resumed otherwise paused.
      * @param base The base currency to fetch list
      *
      * @return [CurrencyResponse] within [Flow] builder
      */
-    fun getCurrencyList(base: Rate): Flow<Result<CurrencyResponse>>
+    fun getCurrencyList(base: Rate, continuation: Continuation): Flow<Result<CurrencyResponse>>
 }

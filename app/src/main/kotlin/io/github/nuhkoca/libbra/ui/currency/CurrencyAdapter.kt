@@ -66,7 +66,10 @@ class CurrencyAdapter @Inject constructor(
                 val list = currentList.toMutableList()
                 list.removeAt(layoutPosition).also { rate ->
                     list.add(0, rate)
-                    submitList(list) { itemClickLiveData.value = item.abbreviation }
+                    submitList(list) {
+                        // Because 0 is always responder
+                        if (layoutPosition > 0) itemClickLiveData.value = item.abbreviation
+                    }
                 }
             }
 

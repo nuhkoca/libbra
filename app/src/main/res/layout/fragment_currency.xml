@@ -12,6 +12,7 @@
         style="@style/Currency.RecyclerView"
         android:layout_width="@dimen/spacing_none"
         android:layout_height="@dimen/spacing_none"
+        android:visibility="invisible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +29,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- merge tag is not working, a known issue https://issuetracker.google.com/issues/143729912 -->
+    <!-- merge tag is not working with ViewBinding, a known issue https://issuetracker.google.com/issues/143729912 -->
     <include
         android:id="@+id/errorContainer"
         layout="@layout/layout_error_view"

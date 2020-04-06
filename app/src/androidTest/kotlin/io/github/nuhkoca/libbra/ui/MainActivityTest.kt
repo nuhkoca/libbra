@@ -18,7 +18,8 @@ package io.github.nuhkoca.libbra.ui
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.IdlingResource
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.MediumTest
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import io.github.nuhkoca.libbra.util.DataBindingIdlingResource
 import org.junit.After
 import org.junit.Before
@@ -29,7 +30,8 @@ import org.junit.runner.RunWith
 /**
  * A test class for [MainActivity]
  */
-@RunWith(AndroidJUnit4::class)
+@RunWith(AndroidJUnit4ClassRunner::class)
+@MediumTest
 class MainActivityTest {
 
     @get:Rule

@@ -19,6 +19,8 @@ import io.github.nuhkoca.libbra.data.Result
 import io.github.nuhkoca.libbra.data.enums.Rate
 import io.github.nuhkoca.libbra.data.model.domain.CurrencyResponse
 import io.github.nuhkoca.libbra.domain.repository.Repository
+import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation
+import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation.RESUME
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -42,15 +44,17 @@ class CurrencyUseCase @Inject constructor(
      * @return [CurrencyResponse] within [Flow] builder
      */
     override fun execute(params: CurrencyParams): Flow<Result<CurrencyResponse>> {
-        return repository.getCurrencyList(params.base)
+        return repository.getCurrencyList(params.base, params.continuation)
     }
 }
 
 /**
  * The data class to fetch list with base currency
  *
+ * @property continuation indicates flow state. If [RESUME] flow is resumed otherwise paused.
  * @property base The base currency
  */
 data class CurrencyParams(
-    val base: Rate = Rate.EUR
+    val base: Rate = Rate.EUR,
+    val continuation: Continuation = Continuation.RESUME
 ) : Params()

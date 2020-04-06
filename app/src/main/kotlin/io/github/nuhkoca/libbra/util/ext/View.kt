@@ -16,6 +16,7 @@
 package io.github.nuhkoca.libbra.util.ext
 
 import android.view.View
+import android.view.View.VISIBLE
 import com.google.android.material.snackbar.Snackbar
 
 /**
@@ -24,3 +25,10 @@ import com.google.android.material.snackbar.Snackbar
  * @param message a String message
  */
 fun View.snackBar(message: String) = showSnackbar(this, message)
+
+/**
+ * Sets [View]'s visibility to [VISIBLE]
+ */
+fun View.show() {
+    visibility = VISIBLE
+}

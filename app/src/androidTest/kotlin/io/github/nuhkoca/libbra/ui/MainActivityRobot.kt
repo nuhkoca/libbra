@@ -28,7 +28,11 @@ import io.github.nuhkoca.libbra.R
  */
 fun launchMain(func: MainActivityRobot.() -> Unit) = MainActivityRobot().apply { func() }
 
+/**
+ * A robot that includes [MainActivityTest]'s assertions.
+ */
 class MainActivityRobot {
+
     fun verifyToolbar() {
         onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
     }

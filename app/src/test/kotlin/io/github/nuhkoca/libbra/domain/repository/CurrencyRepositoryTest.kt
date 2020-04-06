@@ -25,6 +25,7 @@ import io.github.nuhkoca.libbra.data.model.domain.CurrencyResponse
 import io.github.nuhkoca.libbra.data.shared.rule.CoroutinesTestRule
 import io.github.nuhkoca.libbra.shared.assertion.test
 import io.github.nuhkoca.libbra.shared.ext.runBlockingTest
+import io.github.nuhkoca.libbra.util.coroutines.AsyncManager
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -32,6 +33,7 @@ import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
@@ -76,7 +78,7 @@ class CurrencyRepositoryTest : BaseTestClass() {
     override fun setUp() {
         super.setUp()
 
-        every { dataSource.getCurrencyList(capture(currencySlot)) } answers {
+        every { dataSource.getCurrencyList(capture(currencySlot), any()) } answers {
             flowOf(Result.Success(currencyResponse))
         }
 
@@ -90,9 +92,10 @@ class CurrencyRepositoryTest : BaseTestClass() {
     fun `repository should return data`() = coroutinesTestRule.runBlockingTest {
         // Given
         val base = Rate.THB
+        val continuation = AsyncManager.Continuation.RESUME
 
         // When
-        val flow = repository.getCurrencyList(base)
+        val flow = repository.getCurrencyList(base, continuation)
 
         // Then
         flow.test {
@@ -106,7 +109,31 @@ class CurrencyRepositoryTest : BaseTestClass() {
             expectComplete()
         }
 
-        verify(exactly = 1) { dataSource.getCurrencyList(any()) }
+        verify(exactly = 1) { dataSource.getCurrencyList(any(), any()) }
         confirmVerified(dataSource)
     }
+
+    @Test
+    @ExperimentalCoroutinesApi
+    fun `network process should not happen in case of pause`() =
+        coroutinesTestRule.runBlockingTest {
+            // Given
+            val base = Rate.THB
+            val continuation = AsyncManager.Continuation.PAUSE
+
+            // When
+            every {
+                dataSource.getCurrencyList(
+                    capture(currencySlot),
+                    any()
+                )
+            } answers { emptyFlow() }
+
+            val flow = repository.getCurrencyList(base, continuation)
+
+            // Then
+            flow.test {
+                expectComplete()
+            }
+        }
 }
