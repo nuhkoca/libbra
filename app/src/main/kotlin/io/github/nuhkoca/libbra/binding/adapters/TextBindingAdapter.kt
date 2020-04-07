@@ -34,7 +34,7 @@ class TextBindingAdapter @Inject constructor() {
      *
      * @param amount The amount
      */
-    @BindingAdapter("android:text")
+    @BindingAdapter("app:amount")
     fun TextInputEditText.bindAmount(amount: Float) {
         val formattedAmount = formatter.format(amount)
         setText(formattedAmount)

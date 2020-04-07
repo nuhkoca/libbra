@@ -66,11 +66,11 @@ class CurrencyFragment @Inject constructor(
                 viewModel.setBaseCurrency(Rate.valueOf(currency))
                 binding.rvCurrency.scrollToPosition(0)
             })
-            setupRecyclerView()
             KeyboardStateLiveData.state.observe(viewLifecycleOwner, onChanged = { state ->
                 viewModel.setContinuation(state == KeyboardState.CLOSED)
             })
             bindKeyboardStateEvents()
+            setupRecyclerView()
             observeViewModel()
         }
     }

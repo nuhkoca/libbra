@@ -35,7 +35,7 @@
         <item name="fontFamily">@font/montserrat</item>
         <item name="android:imeOptions">actionDone</item>
         <item name="android:inputType">number|numberDecimal|phone</item>
-        <item name="android:maxLength">9</item>
+        <item name="android:maxLength">10</item>
         <item name="android:maxLines">1</item>
         <item name="android:singleLine">true</item>
         <item name="android:textAlignment">textEnd</item>

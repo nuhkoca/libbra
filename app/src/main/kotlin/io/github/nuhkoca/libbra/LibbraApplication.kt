@@ -17,6 +17,7 @@ package io.github.nuhkoca.libbra
 
 import android.app.Application
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ProcessLifecycleOwner
 import io.github.nuhkoca.libbra.BuildConfig.DEBUG
 import io.github.nuhkoca.libbra.di.AppComponent
 import io.github.nuhkoca.libbra.di.DaggerAppComponent
@@ -29,6 +30,8 @@ import timber.log.Timber.DebugTree
  * Also, sets up Timber in the DEBUG BuildConfig.
  */
 class LibbraApplication : Application() {
+
+    private val processLifecycleOwner = ProcessLifecycleOwner.get()
 
     // Instance of the AppComponent that will be used by all the Activities in the project
     val appComponent: AppComponent by lazy {
@@ -47,5 +50,6 @@ class LibbraApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         if (DEBUG) Timber.plant(DebugTree())
+        processLifecycleOwner.lifecycle.addObserver(ApplicationObserver())
     }
 }

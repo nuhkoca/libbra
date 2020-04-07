@@ -56,6 +56,7 @@ object Dependencies {
         const val livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle}"
         const val runtime_ktx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}"
         const val common_java = "androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycle}"
+        const val compiler = "androidx.lifecycle:lifecycle-compiler:${Versions.lifecycle}"
     }
 
     object Dagger {

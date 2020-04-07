@@ -20,8 +20,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import io.github.nuhkoca.libbra.data.model.view.RateViewItem
 import io.github.nuhkoca.libbra.databinding.LayoutCurrencyItemBinding
+import io.github.nuhkoca.libbra.databinding.LayoutCurrencyResponderItemBinding
 import io.github.nuhkoca.libbra.ui.di.MainScope
 import io.github.nuhkoca.libbra.util.event.SingleLiveEvent
 import io.github.nuhkoca.libbra.util.recyclerview.BaseViewHolder
@@ -30,29 +32,69 @@ import javax.inject.Inject
 @MainScope
 class CurrencyAdapter @Inject constructor(
     private val itemClickLiveData: SingleLiveEvent<String>
-) : ListAdapter<RateViewItem, CurrencyAdapter.CurrencyViewHolder>(DIFF_CALLBACK) {
+) : ListAdapter<RateViewItem, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = LayoutCurrencyItemBinding.inflate(inflater, parent, false)
-        return CurrencyViewHolder(binding.root)
+        return when (viewType) {
+            ITEM_RESPONDER -> {
+                val binding = LayoutCurrencyResponderItemBinding.inflate(inflater, parent, false)
+                ResponderViewHolder(binding.root)
+            }
+            ITEM_CURRENCY -> {
+                val binding = LayoutCurrencyItemBinding.inflate(inflater, parent, false)
+                CurrencyViewHolder(binding.root)
+            }
+            else -> throw IllegalStateException("No view type found for $viewType")
+        }
     }
 
-    override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
-        val rate = currentList[position]
-        holder.bindTo(rate)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is ResponderViewHolder -> {
+                val rate = currentList.first()
+                holder.bindTo(rate)
+            }
+            is CurrencyViewHolder -> {
+                val rate = currentList[position]
+                holder.bindTo(rate)
+            }
+        }
     }
 
     override fun onBindViewHolder(
-        holder: CurrencyViewHolder,
+        holder: RecyclerView.ViewHolder,
         position: Int,
         payloads: MutableList<Any>
     ) {
         if (payloads.isEmpty()) {
             super.onBindViewHolder(holder, position, payloads)
         } else {
-            val rate = currentList[position]
-            holder.bindTo(rate)
+            when (position) {
+                0 -> {
+                    holder as ResponderViewHolder
+                    val rate = currentList.first()
+                    holder.bindTo(rate)
+                }
+                else -> {
+                    holder as CurrencyViewHolder
+                    val rate = currentList[position]
+                    holder.bindTo(rate)
+                }
+            }
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == 0) ITEM_RESPONDER else ITEM_CURRENCY
+    }
+
+    inner class ResponderViewHolder(itemView: View) :
+        BaseViewHolder<LayoutCurrencyResponderItemBinding, RateViewItem>(itemView) {
+
+        override fun bindTo(item: RateViewItem) {
+            binding.rate = item
+            super.bindTo(item)
         }
     }
 
@@ -67,8 +109,7 @@ class CurrencyAdapter @Inject constructor(
                 list.removeAt(layoutPosition).also { rate ->
                     list.add(0, rate)
                     submitList(list) {
-                        // Because 0 is always responder
-                        if (layoutPosition > 0) itemClickLiveData.value = item.abbreviation
+                        itemClickLiveData.value = item.abbreviation
                     }
                 }
             }
@@ -78,6 +119,9 @@ class CurrencyAdapter @Inject constructor(
     }
 
     private companion object {
+        private const val ITEM_RESPONDER = 0
+        private const val ITEM_CURRENCY = 1
+
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<RateViewItem>() {
             override fun areItemsTheSame(oldItem: RateViewItem, newItem: RateViewItem): Boolean {
                 return oldItem.id == newItem.id

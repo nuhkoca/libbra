@@ -19,8 +19,6 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
-import android.view.KeyEvent
-import android.view.View.OnKeyListener
 import android.view.inputmethod.EditorInfo
 import com.google.android.material.textfield.TextInputEditText
 import java.text.DecimalFormat
@@ -44,7 +42,6 @@ class CurrencyEditText @JvmOverloads constructor(
     private var isEditing = false
 
     private val textWatcher = object : TextWatcher {
-
         @Synchronized
         override fun afterTextChanged(s: Editable) {
             if (isEditing) return
@@ -92,14 +89,6 @@ class CurrencyEditText @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         addTextChangedListener(textWatcher)
-        setOnKeyListener(OnKeyListener { view, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                clearFocus()
-                true
-            } else {
-                false
-            }
-        })
     }
 
     override fun onEditorAction(actionCode: Int) {

@@ -39,6 +39,7 @@ fun DependencyHandler.addTestDependencies() {
     androidTestImplementation(TestDependencies.test_core)
     androidTestImplementation(TestDependencies.junit)
     androidTestImplementation(TestDependencies.rules)
+    androidTestImplementation(TestDependencies.truth_ext)
     androidTestImplementation(TestDependencies.runner)
     androidTestImplementation(TestDependencies.espresso_core)
     androidTestImplementation(TestDependencies.idling_resource)

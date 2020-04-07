@@ -13,19 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.nuhkoca.libbra
-
-import io.github.nuhkoca.libbra.ui.MainActivityTest
-import io.github.nuhkoca.libbra.ui.currency.CurrencyFragmentTest
-import org.junit.runner.RunWith
-import org.junit.runners.Suite
+package io.github.nuhkoca.libbra.util.widget
 
 /**
- * An instrumented test suite to execute all the test classes under this module.
+ * An object designed to hold current multiplier to calculate each currency based on this.
  */
-@RunWith(Suite::class)
-@Suite.SuiteClasses(
-    CurrencyFragmentTest::class,
-    MainActivityTest::class
-)
-object InstrumentedTestSuite
+object MultiplierHolder {
+
+    @JvmStatic
+    var multiplier: Float = 1.0f
+}

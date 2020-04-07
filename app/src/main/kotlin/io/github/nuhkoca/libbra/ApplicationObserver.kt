@@ -15,17 +15,23 @@
  */
 package io.github.nuhkoca.libbra
 
-import io.github.nuhkoca.libbra.ui.MainActivityTest
-import io.github.nuhkoca.libbra.ui.currency.CurrencyFragmentTest
-import org.junit.runner.RunWith
-import org.junit.runners.Suite
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import io.github.nuhkoca.libbra.util.ext.i
 
 /**
- * An instrumented test suite to execute all the test classes under this module.
+ * A [LifecycleObserver] demonstration that just notifies application state.
  */
-@RunWith(Suite::class)
-@Suite.SuiteClasses(
-    CurrencyFragmentTest::class,
-    MainActivityTest::class
-)
-object InstrumentedTestSuite
+class ApplicationObserver : LifecycleObserver {
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    fun onBackground() {
+        i { "App is in the background" }
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    fun onForeground() {
+        i { "App is in the foreground" }
+    }
+}

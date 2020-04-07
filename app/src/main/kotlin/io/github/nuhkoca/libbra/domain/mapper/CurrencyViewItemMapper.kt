@@ -21,6 +21,7 @@ import io.github.nuhkoca.libbra.data.model.view.CurrencyResponseViewItem
 import io.github.nuhkoca.libbra.data.model.view.RateViewItem
 import io.github.nuhkoca.libbra.util.coroutines.DispatcherProvider
 import io.github.nuhkoca.libbra.util.mapper.Mapper
+import io.github.nuhkoca.libbra.util.widget.MultiplierHolder
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -48,11 +49,12 @@ class CurrencyViewItemMapper @Inject constructor(
         rates with item.baseCurrency
 
         item.rates.forEachIndexed { index, currency ->
+            val multipliedCurrency = currency.amount * MultiplierHolder.multiplier
             val rateViewItem = RateViewItem(
                 index + 1,
                 currency.rate.name,
                 currency.rate.longName,
-                currency.amount,
+                multipliedCurrency,
                 currency.rate.resId
             )
             rates.add(index + 1, rateViewItem)

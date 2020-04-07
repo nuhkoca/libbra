@@ -142,6 +142,7 @@ dependencies {
     implementation(Dependencies.Lifecycle.livedata_ktx)
     implementation(Dependencies.Lifecycle.runtime_ktx)
     implementation(Dependencies.Lifecycle.common_java)
+    kapt(Dependencies.Lifecycle.compiler)
 
     implementation(Dependencies.Dagger.dagger)
     kapt(Dependencies.Dagger.compiler)
