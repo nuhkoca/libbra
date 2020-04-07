@@ -21,7 +21,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
-import io.github.nuhkoca.libbra.util.keyboard.dismissKeyboard
+import io.github.nuhkoca.libbra.util.ext.hideKeyboard
 import io.github.nuhkoca.libbra.util.recyclerview.DefaultItemTouchListener
 
 /**
@@ -38,7 +38,7 @@ class LifecycleAwareTouchListener(
 
     private val defaultItemTouchListener = object : DefaultItemTouchListener() {
         override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-            fragment.dismissKeyboard()
+            fragment.hideKeyboard()
             return super.onInterceptTouchEvent(rv, e)
         }
     }

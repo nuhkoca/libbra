@@ -77,6 +77,7 @@
             android:clickable="@{rate.id == 0}"
             android:focusable="@{rate.id == 0}"
             android:focusableInTouchMode="@{rate.id == 0}"
+            android:hint="@{@string/currency_hint}"
             android:text="@{rate.amount}"
             android:theme="@style/Currency.EditText"
             app:layout_constraintBottom_toBottomOf="@id/ivCurrencyThumbnail"

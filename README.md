@@ -80,8 +80,7 @@ Moreover, has been implemented support for [dark theme](https://developer.androi
 
 | Page  | Light Mode                                        | Dark Mode |
 |-------|---------------------------------------------------|------------------------------------------|
-| Currency | <img src="art/light_mode.jpg" width="250"> |<img src="art/dark_mode.jpg" width="250"> |
-
+| Currency | <img src="art/light_mode.png" width="300"> |<img src="art/dark_mode.png" width="300"> |
 ## Architecture
 
 The architecture of the application is based, apply and strictly complies with each of the following 5 points:

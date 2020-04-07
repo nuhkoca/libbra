@@ -20,6 +20,7 @@ import io.github.nuhkoca.libbra.data.failure.Failure
 import io.github.nuhkoca.libbra.data.failure.Failure.UnhandledFailure
 import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation
 import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation.RESUME
+import io.github.nuhkoca.libbra.util.ext.d
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -49,8 +50,9 @@ internal class DefaultAsyncManager(private val dispatcher: DispatcherProvider) :
         continuation: Continuation,
         body: suspend () -> T
     ): Flow<Result<T>> {
+        d { "Continuation mode is $continuation" }
         return channelFlow<Result<T>> {
-            while (!isClosedForSend && continuation == Continuation.RESUME) {
+            while (!isClosedForSend && continuation == RESUME) {
                 delay(DELAY_IN_MS)
                 send(Result.Success(body()))
             }

@@ -27,8 +27,19 @@ import kotlinx.coroutines.flow.Flow
 @FunctionalInterface
 interface AsyncManager {
 
+    /**
+     * An enum class that indicates flow state.
+     */
     enum class Continuation {
+
+        /**
+         * Resumes the current flow
+         */
         RESUME,
+
+        /**
+         * Pauses the current flow
+         */
         PAUSE
     }
 
@@ -42,7 +53,7 @@ interface AsyncManager {
      * @return [T] within [Flow] builder.
      */
     fun <T> handleAsyncWithTryCatch(
-        continuation: Continuation,
+        continuation: Continuation = RESUME,
         body: suspend () -> T
     ): Flow<Result<T>>
 }

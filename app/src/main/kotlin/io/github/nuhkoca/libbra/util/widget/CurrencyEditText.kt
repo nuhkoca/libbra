@@ -19,11 +19,15 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.KeyEvent
+import android.view.View.OnKeyListener
+import android.view.inputmethod.EditorInfo
 import com.google.android.material.textfield.TextInputEditText
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.ParseException
 import java.util.*
+
 
 /**
  * A custom [TextInputEditText] implementation which is designed for currency handling according to
@@ -45,8 +49,7 @@ class CurrencyEditText @JvmOverloads constructor(
         override fun afterTextChanged(s: Editable) {
             if (isEditing) return
             isEditing = true
-            val parsedAmount = parseText(s.toString())
-            val formattedAmount = formatText(parsedAmount)
+            val formattedAmount = formatText(s.toString())
             setText(formattedAmount)
             setSelection(formattedAmount.length)
             isEditing = false
@@ -62,17 +65,18 @@ class CurrencyEditText @JvmOverloads constructor(
     }
 
     /**
-     * Parses given string to desired number as a currency
+     * Parses and then formats given string to desired number as a currency
      *
      * @param text The text to be parsed
      *
      * @return [Number]
      */
-    private fun parseText(text: String): Number? {
+    private fun formatText(text: String): String {
         return try {
-            formatter.parse(text)
+            val parsedText = formatter.parse(text)
+            formatText(parsedText)
         } catch (e: ParseException) {
-            1
+            ""
         }
     }
 
@@ -88,6 +92,21 @@ class CurrencyEditText @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         addTextChangedListener(textWatcher)
+        setOnKeyListener(OnKeyListener { view, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                clearFocus()
+                true
+            } else {
+                false
+            }
+        })
+    }
+
+    override fun onEditorAction(actionCode: Int) {
+        super.onEditorAction(actionCode)
+        if (actionCode == EditorInfo.IME_ACTION_DONE) {
+            clearFocus()
+        }
     }
 
     override fun onDetachedFromWindow() {

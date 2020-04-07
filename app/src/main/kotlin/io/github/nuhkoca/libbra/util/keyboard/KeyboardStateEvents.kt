@@ -15,13 +15,11 @@
  */
 package io.github.nuhkoca.libbra.util.keyboard
 
-import android.content.Context
 import android.content.res.Resources
 import android.graphics.Rect
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.Window
-import android.view.inputmethod.InputMethodManager
 import androidx.activity.ComponentActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -38,14 +36,6 @@ fun ComponentActivity.bindKeyboardStateEvents() {
 }
 
 fun Fragment.bindKeyboardStateEvents() = requireActivity().bindKeyboardStateEvents()
-
-fun ComponentActivity.dismissKeyboard() {
-    val imm: InputMethodManager =
-        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.hideSoftInputFromWindow(findViewById<ViewGroup>(Window.ID_ANDROID_CONTENT).windowToken, 0)
-}
-
-fun Fragment.dismissKeyboard() = requireActivity().dismissKeyboard()
 
 fun ViewGroup.isKeyboardOpen(visibleThreshold: Float = 100f): Boolean {
     val measureRect = Rect()

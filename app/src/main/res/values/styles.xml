@@ -40,6 +40,8 @@
         <item name="android:singleLine">true</item>
         <item name="android:textAlignment">textEnd</item>
         <item name="android:longClickable">false</item>
+        <item name="hintAnimationEnabled">true</item>
+        <item name="android:focusableInTouchMode">true</item>
     </style>
 
 </resources>

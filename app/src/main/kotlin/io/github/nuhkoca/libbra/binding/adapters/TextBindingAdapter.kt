@@ -19,6 +19,7 @@ import androidx.databinding.BindingAdapter
 import com.google.android.material.textfield.TextInputEditText
 import io.github.nuhkoca.libbra.binding.di.BindingScope
 import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -35,7 +36,23 @@ class TextBindingAdapter @Inject constructor() {
      */
     @BindingAdapter("android:text")
     fun TextInputEditText.bindAmount(amount: Float) {
-        val formattedAmount = DecimalFormat.getInstance(Locale.getDefault()).format(amount)
+        val formattedAmount = formatter.format(amount)
         setText(formattedAmount)
+    }
+
+    /**
+     * Formats hint for target TextView
+     *
+     * @param amount The amount
+     */
+    @BindingAdapter("android:hint")
+    fun TextInputEditText.formatHint(amount: String) {
+        val formattedAmount = formatter.format(amount.toFloat())
+        hint = formattedAmount
+    }
+
+    private companion object {
+        private val formatter: NumberFormat
+            get() = DecimalFormat.getInstance(Locale.getDefault())
     }
 }

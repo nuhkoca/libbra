@@ -38,6 +38,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
@@ -125,6 +126,7 @@ class CurrencyViewModelTest : BaseTestClass() {
 
         currencyViewModel.currencyLiveData.observeForever(observer)
 
+        currencyViewModel.setContinuation(true)
         currencyViewModel.setBaseCurrency(Rate.EUR)
 
         val value = currencyViewModel.currencyLiveData.value
@@ -136,8 +138,8 @@ class CurrencyViewModelTest : BaseTestClass() {
         assertThat(value?.data?.baseCurrency).isAtLeast("EUR")
         assertThat(value?.data?.rates).hasSize(2)
 
-        verify { useCase.execute(any()) }
-        coVerify { mapper.map(any()) }
+        verify(atLeast = 1) { useCase.execute(any()) }
+        coVerify(atLeast = 1) { mapper.map(any()) }
 
         confirmVerified(useCase)
         confirmVerified(mapper)
@@ -152,6 +154,7 @@ class CurrencyViewModelTest : BaseTestClass() {
 
         currencyViewModel.currencyLiveData.observeForever(observer)
 
+        currencyViewModel.setContinuation(true)
         currencyViewModel.setBaseCurrency(Rate.EUR)
 
         val value = currencyViewModel.currencyLiveData.value
@@ -163,7 +166,26 @@ class CurrencyViewModelTest : BaseTestClass() {
         assertThat(value?.data).isNull()
         assertThat(value?.data?.rates).isNull()
 
-        verify { useCase.execute(any()) }
+        verify(atLeast = 1) { useCase.execute(any()) }
+
+        confirmVerified(useCase)
+    }
+
+    @Test
+    @ExperimentalCoroutinesApi
+    fun `network process should not happen in case of pause`() {
+        every { useCase.execute(any()) } returns emptyFlow()
+
+        currencyViewModel.currencyLiveData.observeForever(observer)
+
+        currencyViewModel.setContinuation(false)
+        currencyViewModel.setBaseCurrency(Rate.EUR)
+
+        val value = currencyViewModel.currencyLiveData.value
+
+        assertThat(value).isNull()
+
+        verify(atLeast = 1) { useCase.execute(any()) }
 
         confirmVerified(useCase)
     }
