@@ -43,6 +43,8 @@ class CurrencyViewModel @Inject constructor(
     private val dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
 
+    private var lastKnownCurrency: Rate = Rate.EUR
+
     private val baseCurrencyLiveData = MutableLiveData(Rate.EUR)
     private val continuationLiveData = MutableLiveData(Continuation.RESUME)
 
@@ -55,12 +57,36 @@ class CurrencyViewModel @Inject constructor(
             }
         }
 
+    /**
+     * Specifies the [Continuation] state for network call.
+     *
+     * @param isContinue if true [Continuation.RESUME] otherwise [Continuation.PAUSE]
+     */
     fun setContinuation(isContinue: Boolean) = apply {
         continuationLiveData.value = if (isContinue) Continuation.RESUME else Continuation.PAUSE
     }
 
-    fun setBaseCurrency(base: Rate) = apply { baseCurrencyLiveData.value = base }
+    /**
+     * Proceeds with the last known currency in case e.g. network cut off.
+     */
+    fun refresh() = apply { baseCurrencyLiveData.value = lastKnownCurrency }
 
+    /**
+     * Sets base currency to fetch list of currencies.
+     *
+     * @param base represents the base currency
+     */
+    fun setBaseCurrency(base: Rate) = apply {
+        baseCurrencyLiveData.value = base
+        lastKnownCurrency = base
+    }
+
+    /**
+     * Fetches the list of currencies based on [base] and [continuation].
+     *
+     * @param base represents the base currency
+     * @param continuation represents the state of the currenct call
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun getCurrencyList(
         base: Rate = Rate.EUR,

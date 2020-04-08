@@ -26,7 +26,6 @@ import java.text.NumberFormat
 import java.text.ParseException
 import java.util.*
 
-
 /**
  * A custom [TextInputEditText] implementation which is designed for currency handling according to
  * the current locale.

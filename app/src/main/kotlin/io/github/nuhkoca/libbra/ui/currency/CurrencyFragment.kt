@@ -31,7 +31,9 @@ import io.github.nuhkoca.libbra.ui.di.MainScope
 import io.github.nuhkoca.libbra.util.event.SingleLiveEvent
 import io.github.nuhkoca.libbra.util.ext.addLifecycleAwareScrollListener
 import io.github.nuhkoca.libbra.util.ext.addLifecycleAwareTouchListener
+import io.github.nuhkoca.libbra.util.ext.hide
 import io.github.nuhkoca.libbra.util.ext.show
+import io.github.nuhkoca.libbra.util.ext.smoothSnapToPosition
 import io.github.nuhkoca.libbra.util.ext.snackBar
 import io.github.nuhkoca.libbra.util.ext.viewBinding
 import io.github.nuhkoca.libbra.util.keyboard.KeyboardState
@@ -64,20 +66,25 @@ class CurrencyFragment @Inject constructor(
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             itemClickLiveData.observe(viewLifecycleOwner, onChanged = { currency ->
                 viewModel.setBaseCurrency(Rate.valueOf(currency))
-                binding.rvCurrency.scrollToPosition(0)
+                binding.rvCurrency.smoothSnapToPosition(0)
             })
             KeyboardStateLiveData.state.observe(viewLifecycleOwner, onChanged = { state ->
                 viewModel.setContinuation(state == KeyboardState.CLOSED)
             })
             bindKeyboardStateEvents()
+            setupSwipeRefreshLayout()
             setupRecyclerView()
             observeViewModel()
         }
     }
 
+    private fun setupSwipeRefreshLayout() = with(binding.srlCurrency) {
+        setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent, R.color.colorPrimaryDark)
+        setOnRefreshListener { animate = true; viewModel.refresh() }
+    }
+
     private fun setupRecyclerView() = with(binding.rvCurrency) {
-        setHasFixedSize(true)
-        adapter = currencyAdapter
+        setHasFixedSize(true); adapter = currencyAdapter
         addLifecycleAwareTouchListener(this@CurrencyFragment)
         addLifecycleAwareScrollListener(this@CurrencyFragment) { state ->
             viewModel.setContinuation(state == SCROLL_STATE_IDLE)
@@ -88,15 +95,14 @@ class CurrencyFragment @Inject constructor(
         currencyLiveData.observe(viewLifecycleOwner, onChanged = { state ->
             binding.pbCurrency.isVisible = state.isLoading
             mergedBinding.root.isVisible = state.hasError
+            binding.srlCurrency.isRefreshing = false
             if (state.hasError) {
-                state.errorMessage?.let(binding.container::snackBar)
+                binding.rvCurrency.hide(); state.errorMessage?.let(binding.container::snackBar)
                 return@observe
             }
             state.data?.let {
-                currencyAdapter.submitList(it.rates)
-                binding.rvCurrency.show()
-                if (animate) binding.rvCurrency.scheduleLayoutAnimation()
-                animate = false
+                currencyAdapter.submitList(it.rates); binding.rvCurrency.show()
+                if (animate) binding.rvCurrency.scheduleLayoutAnimation(); animate = false
             }
         })
     }

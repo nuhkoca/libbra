@@ -17,10 +17,14 @@
 
 package io.github.nuhkoca.libbra.util.ext
 
+import android.util.DisplayMetrics
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import io.github.nuhkoca.libbra.util.delegates.LifecycleAwareScrollListener
 import io.github.nuhkoca.libbra.util.delegates.LifecycleAwareTouchListener
+
+private const val MILLISECONDS_PER_INCH = 0.5f
 
 /**
  * Adds lifecycle aware touch listener to target [Fragment].
@@ -41,3 +45,24 @@ fun RecyclerView.addLifecycleAwareScrollListener(
     fragment: Fragment,
     onStateChanged: (newState: Int) -> Unit
 ) = LifecycleAwareScrollListener(fragment, this, onStateChanged)
+
+/**
+ * Adds a very smooth scrolling to [RecyclerView]
+ *
+ * @param position The target position to scroll
+ * @param snapMode The scroll mode
+ */
+fun RecyclerView.smoothSnapToPosition(
+    position: Int,
+    snapMode: Int = LinearSmoothScroller.SNAP_TO_START
+) {
+    val smoothScroller = object : LinearSmoothScroller(context) {
+        override fun getVerticalSnapPreference(): Int = snapMode
+        override fun getHorizontalSnapPreference(): Int = snapMode
+        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+            return MILLISECONDS_PER_INCH / displayMetrics.density
+        }
+    }
+    smoothScroller.targetPosition = position
+    layoutManager?.startSmoothScroll(smoothScroller)
+}

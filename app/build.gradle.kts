@@ -133,6 +133,7 @@ dependencies {
     implementation(Dependencies.UI.activity_ktx)
     implementation(Dependencies.UI.recylerview)
     implementation(Dependencies.UI.constraint_layout)
+    implementation(Dependencies.UI.swipe_refresh_layout)
 
     implementation(Dependencies.Navigation.nav_fragment_ktx)
     implementation(Dependencies.Navigation.nav_ui_ktx)
