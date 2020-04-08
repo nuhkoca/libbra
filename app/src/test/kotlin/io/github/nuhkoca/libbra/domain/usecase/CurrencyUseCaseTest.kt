@@ -17,19 +17,22 @@ package io.github.nuhkoca.libbra.domain.usecase
 
 import BaseTestClass
 import androidx.test.filters.MediumTest
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.github.nuhkoca.libbra.data.Result
 import io.github.nuhkoca.libbra.data.enums.Rate
 import io.github.nuhkoca.libbra.data.model.domain.CurrencyResponse
+import io.github.nuhkoca.libbra.data.model.view.CurrencyResponseViewItem
 import io.github.nuhkoca.libbra.data.shared.rule.CoroutinesTestRule
 import io.github.nuhkoca.libbra.domain.repository.Repository
 import io.github.nuhkoca.libbra.shared.assertion.test
 import io.github.nuhkoca.libbra.shared.ext.runBlockingTest
-import io.github.nuhkoca.libbra.util.coroutines.AsyncManager
+import io.github.nuhkoca.libbra.util.mapper.Mapper
+import io.mockk.coEvery
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -64,6 +67,9 @@ class CurrencyUseCaseTest : BaseTestClass() {
     @MockK
     private lateinit var repository: Repository
 
+    @MockK
+    private lateinit var mapper: Mapper<CurrencyResponse, CurrencyResponseViewItem>
+
     @RelaxedMockK
     private lateinit var currencyResponse: CurrencyResponse
 
@@ -72,19 +78,24 @@ class CurrencyUseCaseTest : BaseTestClass() {
     |    Private members    |
      -----------------------
     */
-    private lateinit var useCase: UseCase.FlowUseCase<CurrencyParams, CurrencyResponse>
+    private lateinit var useCase: UseCase.FlowUseCase<CurrencyParams, CurrencyResponseViewItem>
     private val currencySlot = slot<Rate>()
 
     override fun setUp() {
         super.setUp()
 
-        every { repository.getCurrencyList(capture(currencySlot), any()) } answers {
+        every { repository.getCurrencyList(capture(currencySlot)) } answers {
             flowOf(Result.Success(currencyResponse))
         }
 
+        coEvery { mapper.map(any()) } returns CurrencyResponseViewItem(
+            baseCurrency = "HRK",
+            rates = listOf(mockk(), mockk())
+        )
+
         every { currencyResponse.baseCurrency } returns "HRK"
 
-        useCase = CurrencyUseCase(repository)
+        useCase = CurrencyUseCase(repository, mapper)
     }
 
     @Test
@@ -99,16 +110,16 @@ class CurrencyUseCaseTest : BaseTestClass() {
         // Then
         flow.test {
             expectItem().run {
-                Truth.assertThat(this).isNotNull()
-                Truth.assertThat(this).isInstanceOf(Result.Success::class.java)
+                assertThat(this).isNotNull()
+                assertThat(this).isInstanceOf(Result.Success::class.java)
                 this as Result.Success
-                Truth.assertThat(data.baseCurrency).isEqualTo(base.name)
-                Truth.assertThat(data.rates).isNotNull()
+                assertThat(data.baseCurrency).isEqualTo(base.name)
+                assertThat(data.rates).isNotNull()
             }
             expectComplete()
         }
 
-        verify(exactly = 1) { repository.getCurrencyList(any(), any()) }
+        verify(exactly = 1) { repository.getCurrencyList(any()) }
         confirmVerified(repository)
     }
 
@@ -118,13 +129,12 @@ class CurrencyUseCaseTest : BaseTestClass() {
         coroutinesTestRule.runBlockingTest {
             // Given
             val base = Rate.HRK
-            val continuation = AsyncManager.Continuation.PAUSE
 
             // When
-            every { repository.getCurrencyList(capture(currencySlot), any()) } answers {
+            every { repository.getCurrencyList(capture(currencySlot)) } answers {
                 emptyFlow()
             }
-            val flow = useCase.execute(CurrencyParams(base, continuation))
+            val flow = useCase.execute(CurrencyParams(base))
 
             // Then
             flow.test {

@@ -28,6 +28,17 @@ import javax.inject.Inject
 class TextBindingAdapter @Inject constructor(private val formatter: Formatter) {
 
     /**
+     * Formats and binds given number.
+     *
+     * @param amount The amount
+     */
+    @BindingAdapter("android:amount")
+    fun TextInputEditText.bindAmount(amount: Float) {
+        val formattedAmount = formatter.formatNumber(amount)
+        setText(formattedAmount)
+    }
+
+    /**
      * Formats hint for target TextView
      *
      * @param amount The amount

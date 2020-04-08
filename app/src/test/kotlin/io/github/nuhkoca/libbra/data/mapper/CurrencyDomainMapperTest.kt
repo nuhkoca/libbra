@@ -75,6 +75,7 @@ class CurrencyDomainMapperTest {
 
             // Then
             assertThat(response).isNotNull()
+            assertThat(response.baseCurrency).isEqualTo("EUR")
             assertThat(response.rates).isNotNull()
             assertThat(response.rates).hasSize(2)
             assertThat(response.rates).containsExactlyElementsIn(

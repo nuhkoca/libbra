@@ -76,6 +76,7 @@ class CurrencyViewItemMapperTest {
 
             // Then
             assertThat(response).isNotNull()
+            assertThat(response.baseCurrency).isEqualTo("EUR")
             assertThat(response.rates).isNotNull()
             assertThat(response.rates).hasSize(3)
             assertThat(response.rates).containsExactlyElementsIn(
@@ -84,21 +85,21 @@ class CurrencyViewItemMapperTest {
                         id = 0,
                         abbreviation = "EUR",
                         longName = "Euro",
-                        amount = "1",
+                        amount = 1.0f,
                         icon = 2131230839
                     ),
                     RateViewItem(
                         id = 1,
                         abbreviation = "BGN",
                         longName = "Bulgarian Lev",
-                        amount = "3.9",
+                        amount = 3.9f,
                         icon = 2131230829
                     ),
                     RateViewItem(
                         id = 2,
                         abbreviation = "CHF",
                         longName = "Swiss Franc",
-                        amount = "2.1",
+                        amount = 2.1f,
                         icon = 2131230833
                     )
                 )

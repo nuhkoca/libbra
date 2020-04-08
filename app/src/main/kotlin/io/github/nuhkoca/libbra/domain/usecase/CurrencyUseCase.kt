@@ -18,10 +18,18 @@ package io.github.nuhkoca.libbra.domain.usecase
 import io.github.nuhkoca.libbra.data.Result
 import io.github.nuhkoca.libbra.data.enums.Rate
 import io.github.nuhkoca.libbra.data.model.domain.CurrencyResponse
+import io.github.nuhkoca.libbra.data.model.view.CurrencyResponseViewItem
+import io.github.nuhkoca.libbra.data.succeeded
 import io.github.nuhkoca.libbra.domain.repository.Repository
 import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation
+import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation.PAUSE
 import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation.RESUME
+import io.github.nuhkoca.libbra.util.mapper.Mapper
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -33,8 +41,9 @@ import javax.inject.Singleton
  */
 @Singleton
 class CurrencyUseCase @Inject constructor(
-    private val repository: Repository
-) : UseCase.FlowUseCase<CurrencyParams, CurrencyResponse> {
+    private val repository: Repository,
+    private val mapper: @JvmSuppressWildcards Mapper<CurrencyResponse, CurrencyResponseViewItem>
+) : UseCase.FlowUseCase<CurrencyParams, CurrencyResponseViewItem> {
 
     /**
      * Executes the call with the given parameters.
@@ -43,8 +52,22 @@ class CurrencyUseCase @Inject constructor(
      *
      * @return [CurrencyResponse] within [Flow] builder
      */
-    override fun execute(params: CurrencyParams): Flow<Result<CurrencyResponse>> {
-        return repository.getCurrencyList(params.base, params.continuation)
+    @ExperimentalCoroutinesApi
+    override fun execute(params: CurrencyParams): Flow<Result<CurrencyResponseViewItem>> {
+        if (params.continuation == PAUSE) return emptyFlow()
+        return repository.getCurrencyList(params.base)
+            .flatMapLatest { result ->
+                flow {
+                    if (result.succeeded) {
+                        result as Result.Success
+                        val viewItem = mapper.map(result.data)
+                        emit(Result.Success(viewItem))
+                        return@flow
+                    }
+                    result as Result.Error
+                    emit(Result.Error(result.failure))
+                }
+            }
     }
 }
 
@@ -56,5 +79,5 @@ class CurrencyUseCase @Inject constructor(
  */
 data class CurrencyParams(
     val base: Rate = Rate.EUR,
-    val continuation: Continuation = Continuation.RESUME
+    val continuation: Continuation = RESUME
 ) : Params()

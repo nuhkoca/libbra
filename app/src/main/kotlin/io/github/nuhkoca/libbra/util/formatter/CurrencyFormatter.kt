@@ -25,21 +25,12 @@ import javax.inject.Inject
 @BindingScope
 class CurrencyFormatter @Inject constructor() : Formatter {
 
-    @Suppress("TooGenericExceptionCaught")
     override fun formatText(text: String): String {
-        return try {
-            val number = parseText(text)
-            formatter.format(number)
-        } catch (e: Exception) {
-            return when (e) {
-                is ParseException -> ""
-                is IllegalArgumentException -> ""
-                else -> ""
-            }
-        }
+        val number = parseText(text)
+        return formatNumber(number)
     }
 
-    override fun formatText(number: Number?): String {
+    override fun formatNumber(number: Number?): String {
         return try {
             formatter.format(number)
         } catch (e: IllegalArgumentException) {
@@ -51,7 +42,7 @@ class CurrencyFormatter @Inject constructor() : Formatter {
         return try {
             formatter.parse(text)
         } catch (e: ParseException) {
-            0f
+            0.0f
         }
     }
 }

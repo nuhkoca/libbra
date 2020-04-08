@@ -70,15 +70,15 @@
             app:layout_constraintWidth_percent="0.45"
             tools:text="Australian Dollar" />
 
-        <io.github.nuhkoca.libbra.util.widget.CurrencyEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tietCurrency"
             android:layout_width="@dimen/spacing_none"
             android:layout_height="wrap_content"
+            android:amount="@{rate.amount}"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:hint="@{@string/currency_hint}"
-            android:text="@{rate.amount}"
             android:theme="@style/Currency.EditText"
             app:layout_constraintBottom_toBottomOf="@id/ivCurrencyThumbnail"
             app:layout_constraintEnd_toEndOf="parent"

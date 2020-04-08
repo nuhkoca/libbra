@@ -38,13 +38,13 @@ data class RateViewItem(
     val id: Int,
     val abbreviation: String,
     val longName: String,
-    val amount: String,
+    val amount: Float,
     @DrawableRes
     val icon: Int
 ) : BaseObservable() {
 
     @get:Bindable
-    var multiplier: String by Delegates.observable("1") { _, _, newValue ->
+    var multiplier: String by Delegates.observable("1.0") { _, _, newValue ->
         notifyPropertyChanged(BR.multiplier)
 
         val obtainedMultiplier = if (newValue.isEmpty()) 0f else formatter.parseText(newValue)

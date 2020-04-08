@@ -20,8 +20,6 @@ import io.github.nuhkoca.libbra.data.datasource.DataSource
 import io.github.nuhkoca.libbra.data.enums.Rate
 import io.github.nuhkoca.libbra.data.model.domain.CurrencyResponse
 import io.github.nuhkoca.libbra.di.Remote
-import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation
-import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation.RESUME
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -40,15 +38,11 @@ class CurrencyRepository @Inject constructor(
     /**
      * Fetches list of currencies and returns in [Flow] builder
      *
-     * @param continuation indicates flow state. If [RESUME] flow is resumed otherwise paused.
      * @param base The base currency to fetch list
      *
      * @return [CurrencyResponse] within [Flow] builder
      */
-    override fun getCurrencyList(
-        base: Rate,
-        continuation: Continuation
-    ): Flow<Result<CurrencyResponse>> {
-        return remoteDataSource.getCurrencyList(base, continuation)
+    override fun getCurrencyList(base: Rate): Flow<Result<CurrencyResponse>> {
+        return remoteDataSource.getCurrencyList(base)
     }
 }

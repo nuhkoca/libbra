@@ -51,7 +51,7 @@ class RateSerializerTest {
 
         // Then
         assertThat(rateAsString).isNotEmpty()
-        assertThat(rateAsString).isEqualTo("BRL")
+        assertThat(rateAsString).isEqualTo(rate.name)
     }
 
     @Test

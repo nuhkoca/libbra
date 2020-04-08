@@ -23,19 +23,16 @@ import com.google.common.truth.Truth.assertThat
 import io.github.nuhkoca.libbra.data.Result
 import io.github.nuhkoca.libbra.data.enums.Rate
 import io.github.nuhkoca.libbra.data.failure.Failure
-import io.github.nuhkoca.libbra.data.model.domain.CurrencyResponse
 import io.github.nuhkoca.libbra.data.model.view.CurrencyResponseViewItem
-import io.github.nuhkoca.libbra.data.model.view.RateViewItem
 import io.github.nuhkoca.libbra.data.shared.rule.CoroutinesTestRule
 import io.github.nuhkoca.libbra.domain.usecase.CurrencyParams
 import io.github.nuhkoca.libbra.domain.usecase.UseCase
-import io.github.nuhkoca.libbra.util.mapper.Mapper
-import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.emptyFlow
@@ -67,13 +64,7 @@ class CurrencyViewModelTest : BaseTestClass() {
      -------------
     */
     @MockK
-    private lateinit var useCase: UseCase.FlowUseCase<CurrencyParams, CurrencyResponse>
-
-    @MockK
-    private lateinit var mapper: Mapper<CurrencyResponse, CurrencyResponseViewItem>
-
-    @RelaxedMockK
-    private lateinit var currencyResponse: CurrencyResponse
+    private lateinit var useCase: UseCase.FlowUseCase<CurrencyParams, CurrencyResponseViewItem>
 
     @RelaxedMockK
     private lateinit var observer: Observer<CurrencyViewModel.CurrencyViewState>
@@ -84,6 +75,7 @@ class CurrencyViewModelTest : BaseTestClass() {
      -------------------------
     */
     private lateinit var currencyViewModel: CurrencyViewModel
+    private val currencySlot = slot<Rate>()
 
     @ExperimentalCoroutinesApi
     override fun setUp() {
@@ -92,7 +84,6 @@ class CurrencyViewModelTest : BaseTestClass() {
         currencyViewModel =
             CurrencyViewModel(
                 useCase,
-                mapper,
                 coroutinesTestRule.testDispatcherProvider
             )
     }
@@ -101,28 +92,15 @@ class CurrencyViewModelTest : BaseTestClass() {
     @ExperimentalCoroutinesApi
     fun `currency view state should be filled after data has been fetched`() {
         every { useCase.execute(any()) } answers {
-            flowOf(Result.Success(currencyResponse))
-        }
-
-        coEvery { mapper.map(any()) } returns CurrencyResponseViewItem(
-            baseCurrency = "EUR",
-            rates = listOf(
-                RateViewItem(
-                    id = 0,
-                    abbreviation = "EUR",
-                    longName = "Euro",
-                    amount = "1",
-                    icon = 2131230839
-                ),
-                RateViewItem(
-                    id = 1,
-                    abbreviation = "GBP",
-                    longName = "Pound",
-                    amount = "0.8",
-                    icon = 2131230840
+            flowOf(
+                Result.Success(
+                    CurrencyResponseViewItem(
+                        baseCurrency = "EUR",
+                        rates = listOf(mockk(), mockk())
+                    )
                 )
             )
-        )
+        }
 
         currencyViewModel.currencyLiveData.observeForever(observer)
 
@@ -135,14 +113,12 @@ class CurrencyViewModelTest : BaseTestClass() {
         assertThat(value?.hasError).isFalse()
         assertThat(value?.errorMessage).isNull()
         assertThat(value?.data).isNotNull()
-        assertThat(value?.data?.baseCurrency).isAtLeast("EUR")
+        assertThat(value?.data?.baseCurrency).isEqualTo("EUR")
         assertThat(value?.data?.rates).hasSize(2)
 
         verify(atLeast = 1) { useCase.execute(any()) }
-        coVerify(atLeast = 1) { mapper.map(any()) }
 
         confirmVerified(useCase)
-        confirmVerified(mapper)
     }
 
     @Test

@@ -44,7 +44,7 @@ class CurrencyFormatterTest {
     @Test
     fun `formatter should format given number properly`() {
         // Given
-        val number = 12345678
+        val number = "12345678"
 
         // When
         val result = formatter.formatText(number)

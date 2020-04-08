@@ -18,9 +18,6 @@ package io.github.nuhkoca.libbra.util.coroutines
 import io.github.nuhkoca.libbra.data.Result
 import io.github.nuhkoca.libbra.data.failure.Failure
 import io.github.nuhkoca.libbra.data.failure.Failure.UnhandledFailure
-import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation
-import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation.RESUME
-import io.github.nuhkoca.libbra.util.ext.d
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -40,23 +37,17 @@ internal class DefaultAsyncManager(private val dispatcher: DispatcherProvider) :
      * Handles any asynchronous cal and waits for its result. This wrapper also catches errors and
      * delivers to upper layer.
      *
-     * @param continuation indicates flow state. If [RESUME] flow is resumed otherwise paused.
      * @param body a suspend body
      *
      * @return [T] with [Result] wrapper.
      */
     @ExperimentalCoroutinesApi
-    override fun <T> handleAsyncWithTryCatch(
-        continuation: Continuation,
-        body: suspend () -> T
-    ): Flow<Result<T>> {
-        d { "Continuation mode is $continuation" }
+    override fun <T> handleAsyncWithTryCatch(body: suspend () -> T): Flow<Result<T>> {
         return channelFlow<Result<T>> {
-            while (!isClosedForSend && continuation == RESUME) {
+            while (!isClosedForSend) {
                 delay(DELAY_IN_MS)
                 send(Result.Success(body()))
             }
-            invokeOnClose { close() }
         }.catch { e ->
             when (e) {
                 is Failure -> emit(Result.Error(e))

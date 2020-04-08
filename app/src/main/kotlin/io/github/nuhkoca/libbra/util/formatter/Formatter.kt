@@ -30,11 +30,7 @@ interface Formatter {
      * @param text The text to be formatted
      *
      * @return [Number]
-     *
-     * @throws ParseException if the beginning of the specified string cannot be parsed
-     * @throws IllegalArgumentException if the Format cannot format the given string
      */
-    @Throws(ParseException::class, IllegalArgumentException::class)
     fun formatText(text: String): String
 
     /**
@@ -47,7 +43,7 @@ interface Formatter {
      * @throws IllegalArgumentException if the Format cannot format the given string
      */
     @Throws(IllegalArgumentException::class)
-    fun formatText(number: Number?): String
+    fun formatNumber(number: Number?): String
 
     /**
      * Parses the given string to desired number

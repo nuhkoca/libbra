@@ -54,7 +54,7 @@ class CurrencyViewItemMapper @Inject constructor(
                 index + 1,
                 currency.rate.name,
                 currency.rate.longName,
-                multipliedCurrency.toString(),
+                multipliedCurrency,
                 currency.rate.resId
             )
             rates.add(index + 1, rateViewItem)
@@ -63,8 +63,6 @@ class CurrencyViewItemMapper @Inject constructor(
         CurrencyResponseViewItem(item.baseCurrency, rates)
     }
 }
-
-private const val RESPONDER_AMOUNT_DEFAULT = "1"
 
 /**
  * An infix fun that adds responder to currency list to show it at top.
@@ -78,7 +76,7 @@ private infix fun MutableList<RateViewItem>.with(baseCurrency: String) {
         0, // First id should always be 0
         rate.name,
         rate.longName,
-        RESPONDER_AMOUNT_DEFAULT, // Because base currency amount is always 1
+        1.0f, // Because base currency amount is always 1
         rate.resId
     )
     add(0, responder)

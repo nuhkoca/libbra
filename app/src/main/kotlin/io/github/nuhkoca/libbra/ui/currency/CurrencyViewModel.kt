@@ -17,13 +17,13 @@ package io.github.nuhkoca.libbra.ui.currency
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import io.github.nuhkoca.libbra.data.Result
 import io.github.nuhkoca.libbra.data.enums.Rate
-import io.github.nuhkoca.libbra.data.model.domain.CurrencyResponse
 import io.github.nuhkoca.libbra.data.model.view.CurrencyResponseViewItem
 import io.github.nuhkoca.libbra.data.succeeded
 import io.github.nuhkoca.libbra.domain.usecase.CurrencyParams
@@ -31,15 +31,13 @@ import io.github.nuhkoca.libbra.domain.usecase.UseCase
 import io.github.nuhkoca.libbra.ui.di.MainScope
 import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation
 import io.github.nuhkoca.libbra.util.coroutines.DispatcherProvider
-import io.github.nuhkoca.libbra.util.mapper.Mapper
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @MainScope
 class CurrencyViewModel @Inject constructor(
-    private val currencyUseCase: @JvmSuppressWildcards UseCase.FlowUseCase<CurrencyParams, CurrencyResponse>,
-    private val mapper: @JvmSuppressWildcards Mapper<CurrencyResponse, CurrencyResponseViewItem>,
+    private val currencyUseCase: @JvmSuppressWildcards UseCase.FlowUseCase<CurrencyParams, CurrencyResponseViewItem>,
     private val dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
 
@@ -51,8 +49,8 @@ class CurrencyViewModel @Inject constructor(
     private val _currencyLiveData = MutableLiveData<CurrencyViewState>()
 
     val currencyLiveData: LiveData<CurrencyViewState> =
-        Transformations.switchMap(baseCurrencyLiveData) { rate ->
-            Transformations.switchMap(continuationLiveData) { continuation ->
+        baseCurrencyLiveData.switchMap { rate ->
+            continuationLiveData.switchMap { continuation ->
                 getCurrencyList(rate, continuation)
             }
         }
@@ -93,11 +91,10 @@ class CurrencyViewModel @Inject constructor(
         continuation: Continuation = Continuation.RESUME
     ): LiveData<CurrencyViewState> {
         return currencyUseCase.execute(CurrencyParams(base, continuation))
-            .mapLatest { result ->
-                return@mapLatest if (result.succeeded) {
+            .map { result ->
+                return@map if (result.succeeded) {
                     result as Result.Success
-                    val viewItem = mapper.map(result.data)
-                    currentViewState.copy(data = viewItem, isLoading = false)
+                    currentViewState.copy(data = result.data, isLoading = false)
                 } else {
                     result as Result.Error
                     currentViewState.copy(
@@ -107,6 +104,7 @@ class CurrencyViewModel @Inject constructor(
                     )
                 }
             }.asLiveData(dispatcherProvider.io + viewModelScope.coroutineContext)
+            .distinctUntilChanged()
     }
 
     private inline val currentViewState: CurrencyViewState

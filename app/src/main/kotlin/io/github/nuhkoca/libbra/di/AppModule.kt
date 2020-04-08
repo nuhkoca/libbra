@@ -87,7 +87,7 @@ abstract class AppModule {
     @Singleton
     internal abstract fun bindCurrencyUseCase(
         currencyUseCase: CurrencyUseCase
-    ): UseCase.FlowUseCase<CurrencyParams, CurrencyResponse>
+    ): UseCase.FlowUseCase<CurrencyParams, CurrencyResponseViewItem>
 
     @Module
     internal companion object {

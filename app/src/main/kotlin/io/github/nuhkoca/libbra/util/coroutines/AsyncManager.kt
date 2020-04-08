@@ -16,7 +16,6 @@
 package io.github.nuhkoca.libbra.util.coroutines
 
 import io.github.nuhkoca.libbra.data.Result
-import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation.RESUME
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -47,13 +46,9 @@ interface AsyncManager {
      * Handles any asynchronous call and waits for its result. This wrapper also catches errors and
      * delivers to upper layer.
      *
-     * @param continuation indicates flow state. If [RESUME] flow is resumed otherwise paused.
      * @param body The suspend body to be called
      *
      * @return [T] within [Flow] builder.
      */
-    fun <T> handleAsyncWithTryCatch(
-        continuation: Continuation = RESUME,
-        body: suspend () -> T
-    ): Flow<Result<T>>
+    fun <T> handleAsyncWithTryCatch(body: suspend () -> T): Flow<Result<T>>
 }

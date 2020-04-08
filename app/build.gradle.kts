@@ -66,7 +66,7 @@ android {
         resConfigs("en")
     }
 
-    // 4) JUnit 5 will bundle in files with identical paths; exclude them
+    // JUnit 5 will bundle in files with identical paths; exclude them
     packagingOptions {
         exclude("META-INF/LICENSE*")
     }

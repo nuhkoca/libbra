@@ -25,7 +25,6 @@ import io.github.nuhkoca.libbra.data.shared.rule.CoroutinesTestRule
 import io.github.nuhkoca.libbra.shared.assertion.test
 import io.github.nuhkoca.libbra.shared.ext.runBlockingTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.emptyFlow
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -70,11 +69,10 @@ class DefaultAsyncManagerTest {
             baseCurrency = "EUR",
             rates = listOf(DomainRate(Rate.GBP, 1.1f), DomainRate(Rate.RUB, 4.1f))
         )
-        val continuation = AsyncManager.Continuation.RESUME
 
         // When
         val flow =
-            asyncManager.handleAsyncWithTryCatch(continuation) { mockedResponse }
+            asyncManager.handleAsyncWithTryCatch { mockedResponse }
 
         // Then
         flow.test {
@@ -98,10 +96,9 @@ class DefaultAsyncManagerTest {
     fun `async manager should handle exception properly`() = coroutinesTestRule.runBlockingTest {
         // Given
         val exception = Failure.ServerFailure("Couldn't connect the server.")
-        val continuation = AsyncManager.Continuation.RESUME
 
         // When
-        val flow = asyncManager.handleAsyncWithTryCatch(continuation) { throw exception }
+        val flow = asyncManager.handleAsyncWithTryCatch { throw exception }
 
         // Then
         flow.test {
@@ -114,20 +111,4 @@ class DefaultAsyncManagerTest {
             cancelAndIgnoreRemainingEvents()
         }
     }
-
-    @Test
-    @ExperimentalCoroutinesApi
-    fun `async manager should not send any data in case of pause`() =
-        coroutinesTestRule.runBlockingTest {
-            // Given
-            val continuation = AsyncManager.Continuation.PAUSE
-
-            // When
-            val flow = asyncManager.handleAsyncWithTryCatch(continuation) { emptyFlow<Nothing>() }
-
-            // Then
-            flow.test {
-                expectComplete()
-            }
-        }
 }
