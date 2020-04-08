@@ -18,15 +18,14 @@ package io.github.nuhkoca.libbra.binding.adapters
 import androidx.databinding.BindingAdapter
 import com.google.android.material.textfield.TextInputEditText
 import io.github.nuhkoca.libbra.binding.di.BindingScope
-import java.text.NumberFormat
-import java.util.*
+import io.github.nuhkoca.libbra.util.formatter.Formatter
 import javax.inject.Inject
 
 /**
  * A [BindingAdapter] for views whose can work with text.
  */
 @BindingScope
-class TextBindingAdapter @Inject constructor() {
+class TextBindingAdapter @Inject constructor(private val formatter: Formatter) {
 
     /**
      * Formats hint for target TextView
@@ -35,13 +34,7 @@ class TextBindingAdapter @Inject constructor() {
      */
     @BindingAdapter("android:hint")
     fun TextInputEditText.formatHint(amount: String) {
-        val parsedAmount = formatter.parse(amount)
-        val formattedAmount = formatter.format(parsedAmount)
+        val formattedAmount = formatter.formatText(amount)
         hint = formattedAmount
-    }
-
-    private companion object {
-        private val formatter: NumberFormat
-            get() = NumberFormat.getInstance(Locale.getDefault())
     }
 }

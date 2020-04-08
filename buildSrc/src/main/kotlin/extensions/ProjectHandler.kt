@@ -24,8 +24,10 @@ import Release
 import ReleaseConfig
 import Test
 import com.android.build.gradle.api.AndroidSourceSet
+import com.android.build.gradle.api.ApplicationVariant
 import com.android.build.gradle.internal.dsl.BuildType
 import com.android.build.gradle.internal.dsl.SigningConfig
+import org.gradle.api.DomainObjectSet
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
@@ -52,6 +54,17 @@ fun Project.createRelease(namedDomainObjectContainer: NamedDomainObjectContainer
  */
 fun Project.createDebug(namedDomainObjectContainer: NamedDomainObjectContainer<BuildType>) =
     Debug.create(namedDomainObjectContainer, this)
+
+/**
+ * Creates custom naming for apk outputs.
+ *
+ * @param namedDomainObjectContainer The build type
+ * @param domainObjectSet The variant set to generate custom apk naming for each variant
+ */
+fun Project.generateApplicationOutputs(
+    namedDomainObjectContainer: NamedDomainObjectContainer<BuildType>,
+    domainObjectSet: DomainObjectSet<ApplicationVariant>
+) = domainObjectSet.generateApplicationOutputs(this, namedDomainObjectContainer)
 
 /**
  * An extension to create main Kotlin source set.

@@ -25,6 +25,7 @@ import extensions.createKotlinMain
 import extensions.createKotlinTest
 import extensions.createRelease
 import extensions.createReleaseConfig
+import extensions.generateApplicationOutputs
 import extensions.getSemanticAppVersionName
 import extensions.setDefaults
 import utils.javaVersion
@@ -77,6 +78,7 @@ android {
     buildTypes {
         createRelease(this)
         createDebug(this)
+        generateApplicationOutputs(this, applicationVariants)
 
         forEach { type ->
             if (type.name == "release") {

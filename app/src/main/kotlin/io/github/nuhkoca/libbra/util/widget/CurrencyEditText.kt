@@ -21,9 +21,8 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
 import com.google.android.material.textfield.TextInputEditText
-import java.text.NumberFormat
-import java.text.ParseException
-import java.util.*
+import io.github.nuhkoca.libbra.util.formatter.CurrencyFormatter
+import io.github.nuhkoca.libbra.util.formatter.Formatter
 
 /**
  * A custom [TextInputEditText] implementation which is designed for currency handling according to
@@ -44,7 +43,7 @@ class CurrencyEditText @JvmOverloads constructor(
         override fun afterTextChanged(s: Editable) {
             if (isEditing) return
             isEditing = true
-            val formattedAmount = formatText(s.toString())
+            val formattedAmount = formatter.formatText(s.toString())
             setText(formattedAmount)
             setSelection(text.toString().length)
             isEditing = false
@@ -58,31 +57,6 @@ class CurrencyEditText @JvmOverloads constructor(
             if (isEditing) return
         }
     }
-
-    /**
-     * Parses and then formats given string to desired number as a currency
-     *
-     * @param text The text to be parsed
-     *
-     * @return [Number]
-     */
-    private fun formatText(text: String): String {
-        return try {
-            val parsedText = formatter.parse(text)
-            formatText(parsedText)
-        } catch (e: ParseException) {
-            ""
-        }
-    }
-
-    /**
-     * Formats given number to desired text
-     *
-     * @param number The number to be formatted
-     *
-     * @return [String]
-     */
-    private fun formatText(number: Number?) = formatter.format(number)
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -102,7 +76,6 @@ class CurrencyEditText @JvmOverloads constructor(
     }
 
     private companion object {
-        private inline val formatter: NumberFormat
-            get() = NumberFormat.getInstance(Locale.getDefault())
+        private val formatter: Formatter = CurrencyFormatter()
     }
 }

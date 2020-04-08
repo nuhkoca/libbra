@@ -25,6 +25,7 @@ import io.github.nuhkoca.libbra.domain.repository.CurrencyRepositoryTest
 import io.github.nuhkoca.libbra.domain.usecase.CurrencyUseCaseTest
 import io.github.nuhkoca.libbra.ui.currency.CurrencyViewModelTest
 import io.github.nuhkoca.libbra.util.coroutines.DefaultAsyncManagerTest
+import io.github.nuhkoca.libbra.util.formatter.CurrencyFormatterTest
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
 
@@ -42,6 +43,7 @@ import org.junit.runners.Suite
     CurrencyRepositoryTest::class,
     CurrencyUseCaseTest::class,
     CurrencyViewModelTest::class,
-    DefaultAsyncManagerTest::class
+    DefaultAsyncManagerTest::class,
+    CurrencyFormatterTest::class
 )
 object UnitTestSuite

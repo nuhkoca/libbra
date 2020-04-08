@@ -18,36 +18,47 @@ package io.github.nuhkoca.libbra.binding.di
 import android.content.Context
 import coil.ImageLoader
 import coil.ImageLoaderBuilder
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import io.github.nuhkoca.libbra.binding.adapters.ImageBindingAdapter
 import io.github.nuhkoca.libbra.binding.adapters.TextBindingAdapter
+import io.github.nuhkoca.libbra.util.formatter.CurrencyFormatter
+import io.github.nuhkoca.libbra.util.formatter.Formatter
 import javax.inject.Qualifier
 import javax.inject.Scope
 
 @Module
-internal object BindingModule {
+internal abstract class BindingModule {
 
-    private const val DEFAULT_MEMORY_MULTIPLIER = 0.5
-
-    @Provides
+    @Binds
     @BindingScope
-    internal fun provideImageLoader(context: Context) = ImageLoaderBuilder(context).apply {
-        availableMemoryPercentage(DEFAULT_MEMORY_MULTIPLIER)
-        crossfade(true)
-    }.build()
+    internal abstract fun provideFormatter(currencyFormatter: CurrencyFormatter): Formatter
 
-    @Provides
-    @InternalApi
-    @BindingScope
-    internal fun provideImageBindingAdapter(
-        imageLoader: ImageLoader
-    ) = ImageBindingAdapter(imageLoader)
+    @Module
+    internal companion object {
 
-    @Provides
-    @InternalApi
-    @BindingScope
-    internal fun provideTextBindingAdapter() = TextBindingAdapter()
+        private const val DEFAULT_MEMORY_MULTIPLIER = 0.5
+
+        @Provides
+        @BindingScope
+        internal fun provideImageLoader(context: Context) = ImageLoaderBuilder(context).apply {
+            availableMemoryPercentage(DEFAULT_MEMORY_MULTIPLIER)
+            crossfade(true)
+        }.build()
+
+        @Provides
+        @InternalApi
+        @BindingScope
+        internal fun provideImageBindingAdapter(
+            imageLoader: ImageLoader
+        ) = ImageBindingAdapter(imageLoader)
+
+        @Provides
+        @InternalApi
+        @BindingScope
+        internal fun provideTextBindingAdapter(formatter: Formatter) = TextBindingAdapter(formatter)
+    }
 }
 
 @Scope

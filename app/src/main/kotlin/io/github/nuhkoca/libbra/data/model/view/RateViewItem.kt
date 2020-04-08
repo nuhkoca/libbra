@@ -20,9 +20,9 @@ import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import io.github.nuhkoca.libbra.BR
 import io.github.nuhkoca.libbra.util.ext.i
+import io.github.nuhkoca.libbra.util.formatter.CurrencyFormatter
+import io.github.nuhkoca.libbra.util.formatter.Formatter
 import io.github.nuhkoca.libbra.util.widget.MultiplierHolder
-import java.text.NumberFormat
-import java.util.*
 import kotlin.properties.Delegates
 
 /**
@@ -44,19 +44,16 @@ data class RateViewItem(
 ) : BaseObservable() {
 
     @get:Bindable
-    var multiplier: String by Delegates.observable("1") { _, oldValue, newValue ->
+    var multiplier: String by Delegates.observable("1") { _, _, newValue ->
         notifyPropertyChanged(BR.multiplier)
 
-        if (newValue == oldValue) {
-            val obtainedMultiplier = if (newValue.isEmpty()) 0f else formatter.parse(newValue)
-            MultiplierHolder.multiplier = formatter.format(obtainedMultiplier).toFloat()
+        val obtainedMultiplier = if (newValue.isEmpty()) 0f else formatter.parseText(newValue)
+        MultiplierHolder.multiplier = obtainedMultiplier.toFloat()
 
-            i { "Current multiplier is $obtainedMultiplier" }
-        }
+        i { "Current multiplier is $obtainedMultiplier" }
     }
 
     private companion object {
-        private inline val formatter: NumberFormat
-            get() = NumberFormat.getInstance(Locale.getDefault())
+        private val formatter: Formatter = CurrencyFormatter()
     }
 }
