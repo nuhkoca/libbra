@@ -19,10 +19,14 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.FragmentFactory
 import androidx.navigation.fragment.NavHostFragment
+import io.github.nuhkoca.libbra.di.factory.LibbraFragmentFactory
 import io.github.nuhkoca.libbra.ui.di.MainScope
 import io.github.nuhkoca.libbra.util.ext.libbraApplication
 import javax.inject.Inject
 
+/**
+ * A custom [NavHostFragment] to allow [LibbraFragmentFactory] to inflate fragments using this host.
+ */
 @MainScope
 class NavHostFragment : NavHostFragment() {
 

@@ -43,8 +43,8 @@ class CurrencyViewModel @Inject constructor(
     private val dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
 
-    private val baseCurrencyLiveData = MutableLiveData<Rate>()
-    private val continuationLiveData = MutableLiveData<Continuation>()
+    private val baseCurrencyLiveData = MutableLiveData(Rate.EUR)
+    private val continuationLiveData = MutableLiveData(Continuation.RESUME)
 
     private val _currencyLiveData = MutableLiveData<CurrencyViewState>()
 
@@ -54,11 +54,6 @@ class CurrencyViewModel @Inject constructor(
                 getCurrencyList(rate, continuation)
             }
         }
-
-    init {
-        setContinuation(true)
-        setBaseCurrency(Rate.EUR)
-    }
 
     fun setContinuation(isContinue: Boolean) = apply {
         continuationLiveData.value = if (isContinue) Continuation.RESUME else Continuation.PAUSE

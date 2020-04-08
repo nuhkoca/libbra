@@ -46,9 +46,9 @@ To maintain the style and quality of the code, are used the bellow static analys
 
 | Tools                                                   | Config file                                                                       | Check command             | Fix command               |
 |---------------------------------------------------------|----------------------------------------------------------------------------------:|---------------------------|---------------------------|
-| [detekt](https://github.com/arturbosch/detekt)          | [/.detekt](https://github.com/nuhkoca/revolut-task-libbra/tree/master/default-detekt-config.yml)     | `./gradlew detekt`        | -                         |
+| [detekt](https://github.com/arturbosch/detekt)          | [default-detekt-config](https://github.com/nuhkoca/revolut-task-libbra/tree/master/default-detekt-config.yml)     | `./gradlew detekt`        | -                         |
 | [ktlint](https://github.com/JLLeitschuh/ktlint-gradle)  | -                                                                                 | `./gradlew ktlintCheck`   | `./gradlew ktlintFormat`  |
-| [spotless](https://github.com/diffplug/spotless)        | [/.spotless](https://github.com/nuhkoca/revolut-task-libbra/tree/master/spotless) | `./gradlew spotlessCheck` | `./gradlew spotlessApply` |
+| [spotless](https://github.com/diffplug/spotless)        | [/spotless](https://github.com/nuhkoca/revolut-task-libbra/tree/master/spotless) | `./gradlew spotlessCheck` | `./gradlew spotlessApply` |
 | [lint](https://developer.android.com/studio/write/lint) | [/.lint](https://github.com/nuhkoca/revolut-task-libbra/tree/master/.lint)        | `./gradlew lint`          | -                         |
 
 All these tools are integrated in [pre-commit git hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks), in order
