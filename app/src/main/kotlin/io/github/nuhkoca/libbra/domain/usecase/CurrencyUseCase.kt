@@ -21,13 +21,9 @@ import io.github.nuhkoca.libbra.data.model.domain.CurrencyResponse
 import io.github.nuhkoca.libbra.data.model.view.CurrencyResponseViewItem
 import io.github.nuhkoca.libbra.data.succeeded
 import io.github.nuhkoca.libbra.domain.repository.Repository
-import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation
-import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation.PAUSE
-import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation.RESUME
 import io.github.nuhkoca.libbra.util.mapper.Mapper
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -54,7 +50,6 @@ class CurrencyUseCase @Inject constructor(
      */
     @ExperimentalCoroutinesApi
     override fun execute(params: CurrencyParams): Flow<Result<CurrencyResponseViewItem>> {
-        if (params.continuation == PAUSE) return emptyFlow()
         return repository.getCurrencyList(params.base)
             .flatMapLatest { result ->
                 flow {
@@ -74,10 +69,8 @@ class CurrencyUseCase @Inject constructor(
 /**
  * The data class to fetch list with base currency
  *
- * @property continuation indicates flow state. If [RESUME] flow is resumed otherwise paused.
  * @property base The base currency
  */
 data class CurrencyParams(
-    val base: Rate = Rate.EUR,
-    val continuation: Continuation = RESUME
+    val base: Rate = Rate.EUR
 ) : Params()

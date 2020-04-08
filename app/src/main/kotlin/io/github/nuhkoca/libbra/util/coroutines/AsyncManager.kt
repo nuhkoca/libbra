@@ -27,22 +27,6 @@ import kotlinx.coroutines.flow.Flow
 interface AsyncManager {
 
     /**
-     * An enum class that indicates flow state.
-     */
-    enum class Continuation {
-
-        /**
-         * Resumes the current flow
-         */
-        RESUME,
-
-        /**
-         * Pauses the current flow
-         */
-        PAUSE
-    }
-
-    /**
      * Handles any asynchronous call and waits for its result. This wrapper also catches errors and
      * delivers to upper layer.
      *

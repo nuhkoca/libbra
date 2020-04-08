@@ -36,7 +36,6 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
@@ -122,23 +121,4 @@ class CurrencyUseCaseTest : BaseTestClass() {
         verify(exactly = 1) { repository.getCurrencyList(any()) }
         confirmVerified(repository)
     }
-
-    @Test
-    @ExperimentalCoroutinesApi
-    fun `network process should not happen in case of pause`() =
-        coroutinesTestRule.runBlockingTest {
-            // Given
-            val base = Rate.HRK
-
-            // When
-            every { repository.getCurrencyList(capture(currencySlot)) } answers {
-                emptyFlow()
-            }
-            val flow = useCase.execute(CurrencyParams(base))
-
-            // Then
-            flow.test {
-                expectComplete()
-            }
-        }
 }

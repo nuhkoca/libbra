@@ -29,9 +29,9 @@ import io.github.nuhkoca.libbra.data.succeeded
 import io.github.nuhkoca.libbra.domain.usecase.CurrencyParams
 import io.github.nuhkoca.libbra.domain.usecase.UseCase
 import io.github.nuhkoca.libbra.ui.di.MainScope
-import io.github.nuhkoca.libbra.util.coroutines.AsyncManager.Continuation
 import io.github.nuhkoca.libbra.util.coroutines.DispatcherProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -41,27 +41,29 @@ class CurrencyViewModel @Inject constructor(
     private val dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
 
+    private var job = Job()
+
     private var lastKnownCurrency: Rate = Rate.EUR
 
     private val baseCurrencyLiveData = MutableLiveData(Rate.EUR)
-    private val continuationLiveData = MutableLiveData(Continuation.RESUME)
 
     private val _currencyLiveData = MutableLiveData<CurrencyViewState>()
 
     val currencyLiveData: LiveData<CurrencyViewState> =
-        baseCurrencyLiveData.switchMap { rate ->
-            continuationLiveData.switchMap { continuation ->
-                getCurrencyList(rate, continuation)
-            }
-        }
+        baseCurrencyLiveData.switchMap { rate -> getCurrencyList(rate) }
 
     /**
-     * Specifies the [Continuation] state for network call.
+     * Specifies the continuation state for network call.
      *
-     * @param isContinue if true [Continuation.RESUME] otherwise [Continuation.PAUSE]
+     * @param isContinue if true flow is resumed otherwise paused
      */
     fun setContinuation(isContinue: Boolean) = apply {
-        continuationLiveData.value = if (isContinue) Continuation.RESUME else Continuation.PAUSE
+        if (isContinue) {
+            job = Job()
+            refresh()
+        } else {
+            job.cancel()
+        }
     }
 
     /**
@@ -80,17 +82,13 @@ class CurrencyViewModel @Inject constructor(
     }
 
     /**
-     * Fetches the list of currencies based on [base] and [continuation].
+     * Fetches the list of currencies based on [base].
      *
      * @param base represents the base currency
-     * @param continuation represents the state of the currenct call
      */
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun getCurrencyList(
-        base: Rate = Rate.EUR,
-        continuation: Continuation = Continuation.RESUME
-    ): LiveData<CurrencyViewState> {
-        return currencyUseCase.execute(CurrencyParams(base, continuation))
+    private fun getCurrencyList(base: Rate = Rate.EUR): LiveData<CurrencyViewState> {
+        return currencyUseCase.execute(CurrencyParams(base))
             .map { result ->
                 return@map if (result.succeeded) {
                     result as Result.Success
@@ -103,7 +101,7 @@ class CurrencyViewModel @Inject constructor(
                         errorMessage = result.failure.message
                     )
                 }
-            }.asLiveData(dispatcherProvider.io + viewModelScope.coroutineContext)
+            }.asLiveData(dispatcherProvider.io + viewModelScope.coroutineContext + job)
             .distinctUntilChanged()
     }
 
