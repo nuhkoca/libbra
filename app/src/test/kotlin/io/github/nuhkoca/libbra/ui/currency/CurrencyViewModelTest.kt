@@ -111,14 +111,14 @@ class CurrencyViewModelTest : BaseTestClass() {
                     id = 0,
                     abbreviation = "EUR",
                     longName = "Euro",
-                    amount = 1f,
+                    amount = "1",
                     icon = 2131230839
                 ),
                 RateViewItem(
                     id = 1,
                     abbreviation = "GBP",
                     longName = "Pound",
-                    amount = 0.8f,
+                    amount = "0.8",
                     icon = 2131230840
                 )
             )

@@ -84,21 +84,21 @@ class CurrencyViewItemMapperTest {
                         id = 0,
                         abbreviation = "EUR",
                         longName = "Euro",
-                        amount = 1.0f,
+                        amount = "1",
                         icon = 2131230839
                     ),
                     RateViewItem(
                         id = 1,
                         abbreviation = "BGN",
                         longName = "Bulgarian Lev",
-                        amount = 3.9f,
+                        amount = "3.9",
                         icon = 2131230829
                     ),
                     RateViewItem(
                         id = 2,
                         abbreviation = "CHF",
                         longName = "Swiss Franc",
-                        amount = 2.1f,
+                        amount = "2.1",
                         icon = 2131230833
                     )
                 )

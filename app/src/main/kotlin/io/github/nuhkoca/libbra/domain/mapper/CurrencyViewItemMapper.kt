@@ -64,6 +64,8 @@ class CurrencyViewItemMapper @Inject constructor(
     }
 }
 
+private const val RESPONDER_AMOUNT_DEFAULT = "1"
+
 /**
  * An infix fun that adds responder to currency list to show it at top.
  *
@@ -76,7 +78,7 @@ private infix fun MutableList<RateViewItem>.with(baseCurrency: String) {
         0, // First id should always be 0
         rate.name,
         rate.longName,
-        "1", // Because base currency amount is always 1
+        RESPONDER_AMOUNT_DEFAULT, // Because base currency amount is always 1
         rate.resId
     )
     add(0, responder)
