@@ -21,7 +21,6 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
 import com.google.android.material.textfield.TextInputEditText
-import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.ParseException
 import java.util.*
@@ -47,7 +46,7 @@ class CurrencyEditText @JvmOverloads constructor(
             isEditing = true
             val formattedAmount = formatText(s.toString())
             setText(formattedAmount)
-            setSelection(formattedAmount.length)
+            setSelection(text.toString().length)
             isEditing = false
         }
 
@@ -104,6 +103,6 @@ class CurrencyEditText @JvmOverloads constructor(
 
     private companion object {
         private inline val formatter: NumberFormat
-            get() = DecimalFormat.getInstance(Locale.getDefault())
+            get() = NumberFormat.getInstance(Locale.getDefault())
     }
 }

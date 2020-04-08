@@ -54,7 +54,7 @@ class CurrencyViewItemMapper @Inject constructor(
                 index + 1,
                 currency.rate.name,
                 currency.rate.longName,
-                multipliedCurrency,
+                multipliedCurrency.toString(),
                 currency.rate.resId
             )
             rates.add(index + 1, rateViewItem)
@@ -76,7 +76,7 @@ private infix fun MutableList<RateViewItem>.with(baseCurrency: String) {
         0, // First id should always be 0
         rate.name,
         rate.longName,
-        1f, // Because base currency amount is always 1
+        "1", // Because base currency amount is always 1
         rate.resId
     )
     add(0, responder)

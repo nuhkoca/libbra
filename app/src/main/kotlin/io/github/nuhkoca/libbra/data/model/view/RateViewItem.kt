@@ -19,11 +19,11 @@ import androidx.annotation.DrawableRes
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import io.github.nuhkoca.libbra.BR
-import io.github.nuhkoca.libbra.util.widget.MultiplierHolder
 import io.github.nuhkoca.libbra.util.ext.i
-import java.text.DecimalFormat
+import io.github.nuhkoca.libbra.util.widget.MultiplierHolder
 import java.text.NumberFormat
 import java.util.*
+import kotlin.properties.Delegates
 
 /**
  * A data class that includes each currency for view layer
@@ -38,27 +38,25 @@ data class RateViewItem(
     val id: Int,
     val abbreviation: String,
     val longName: String,
-    val amount: Float,
+    val amount: String,
     @DrawableRes
     val icon: Int
 ) : BaseObservable() {
 
-    var multiplier: String = formatText(MultiplierHolder.multiplier)
-        @Bindable get
-        set(value) {
-            field = value
-            notifyPropertyChanged(BR.multiplier)
+    @get:Bindable
+    var multiplier: String by Delegates.observable("1") { _, oldValue, newValue ->
+        notifyPropertyChanged(BR.multiplier)
 
-            val desiredMultiplier = if (field.isEmpty()) 0f else formatter.parse(field)
-            MultiplierHolder.multiplier = desiredMultiplier.toFloat()
+        if (newValue == oldValue) {
+            val obtainedMultiplier = if (newValue.isEmpty()) 0f else formatter.parse(newValue)
+            MultiplierHolder.multiplier = formatter.format(obtainedMultiplier).toFloat()
 
-            i { "Current multiplier is $desiredMultiplier" }
+            i { "Current multiplier is $obtainedMultiplier" }
         }
+    }
 
     private companion object {
         private inline val formatter: NumberFormat
-            get() = DecimalFormat.getInstance(Locale.getDefault())
-
-        private fun formatText(number: Number?) = formatter.format(number)
+            get() = NumberFormat.getInstance(Locale.getDefault())
     }
 }
