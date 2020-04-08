@@ -1,5 +1,6 @@
 ## Libbra
-![Libbra](https://github.com/nuhkoca/revolut-task-libbra/workflows/Libbra/badge.svg)
+![Libbra Debug](https://github.com/nuhkoca/revolut-task-libbra/workflows/Libbra%20Debug/badge.svg)
+![Libbra Release](https://github.com/nuhkoca/revolut-task-libbra/workflows/Libbra%20Release/badge.svg)
 [![CodeStyle](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 [![Kotlin Version](https://img.shields.io/badge/kotlin-1.3.61-blue.svg)](http://kotlinlang.org/)
 [![Gradle](https://lv.binarybabel.org/catalog-api/gradle/latest.svg)](https://lv.binarybabel.org/catalog/gradle/latest)

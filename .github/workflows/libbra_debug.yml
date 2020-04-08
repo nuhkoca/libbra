@@ -1,4 +1,4 @@
-name: Libbra
+name: Libbra Debug
 
 on:
   push:
