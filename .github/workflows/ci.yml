@@ -27,6 +27,9 @@ jobs:
       - name: Clean Cache
         run: rm -rf ~/.gradle/caches
 
+      - name: Make checksum executable
+        run: chmod +x ./checksum.sh
+
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v1
 
