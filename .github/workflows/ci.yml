@@ -1,4 +1,4 @@
-name: Libbra Debug
+name: Libbra
 
 on:
   push:
@@ -27,10 +27,16 @@ jobs:
       - name: Clean Cache
         run: rm -rf ~/.gradle/caches
 
+      - name: Gradle Wrapper Validation
+        uses: gradle/wrapper-validation-action@v1
+
       - name: Install JDK 1.8
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+
+      - name: Generate cache key
+        run: ./checksum.sh checksum.txt
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
@@ -38,12 +44,12 @@ jobs:
       - name: Check Dependency Updates
         run: ./gradlew dependencyUpdates -Drevision=release
 
-      # Restore the cache.
-      # Intentionally don't set 'restore-keys' so the cache never contains redundant dependencies.
-      - uses: actions/cache@v1
+      - uses: actions/cache@v1.1.2
         with:
           path: ~/.gradle/caches
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle.kts') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }} }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('checksum.txt') }}
+          restore-keys: |
+              ${{ runner.os }}-gradle-
 
   check-style:
     needs: setup
@@ -52,12 +58,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Restore the cache.
-      # Intentionally don't set 'restore-keys' so the cache never contains redundant dependencies.
-      - uses: actions/cache@v1
+      - uses: actions/cache@v1.1.2
         with:
           path: ~/.gradle/caches
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle.kts') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }} }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('checksum.txt') }}
+          restore-keys: |
+              ${{ runner.os }}-gradle-
 
       - name: Run Lint
         run: ./gradlew lintDebug
@@ -71,12 +77,15 @@ jobs:
       - name: Run Spotless
         run: ./gradlew spotlessCheck
 
-      - name: Upload Reports
-        uses: actions/upload-artifact@v1
+      - name: (Fail-only) Bundle the build report
         if: failure()
+        run: find . -type d -name 'reports' | zip -@ -r build-reports.zip
+      - name: (Fail-only) Upload the build report
+        if: failure()
+        uses: actions/upload-artifact@v1
         with:
-          name: reports
-          path: app/build/reports
+          name: error-report
+          path: build-reports.zip
 
   build:
     needs: check-style
@@ -85,12 +94,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Restore the cache.
-      # Intentionally don't set 'restore-keys' so the cache never contains redundant dependencies.
-      - uses: actions/cache@v1
+      - uses: actions/cache@v1.1.2
         with:
           path: ~/.gradle/caches
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle.kts') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }} }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('checksum.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Create Build Report
         uses: eskatos/gradle-command-action@v1
@@ -121,15 +130,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Restore the cache.
-      # Intentionally don't set 'restore-keys' so the cache never contains redundant dependencies.
-      - uses: actions/cache@v1
+      - uses: actions/cache@v1.1.2
         with:
           path: ~/.gradle/caches
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle.kts') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }} }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('checksum.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Unit Tests
-        run: ./gradlew testDebugUnitTest :rules:test # lint tests requires this task
+        run: ./gradlew testDebugUnitTest :rules:test # test task required for lint test
 
   ui-test:
     needs: test
@@ -138,12 +147,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Restore the cache.
-      # Intentionally don't set 'restore-keys' so the cache never contains redundant dependencies.
-      - uses: actions/cache@v1
+      - uses: actions/cache@v1.1.2
         with:
           path: ~/.gradle/caches
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle.kts') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }} }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('checksum.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Instrumentation Tests
         uses: reactivecircus/android-emulator-runner@v2
