@@ -21,11 +21,13 @@ import io.github.nuhkoca.libbra.data.model.domain.CurrencyResponse
 import io.github.nuhkoca.libbra.data.model.view.CurrencyResponseViewItem
 import io.github.nuhkoca.libbra.data.succeeded
 import io.github.nuhkoca.libbra.domain.repository.Repository
+import io.github.nuhkoca.libbra.util.coroutines.DispatcherProvider
 import io.github.nuhkoca.libbra.util.mapper.Mapper
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,7 +40,8 @@ import javax.inject.Singleton
 @Singleton
 class CurrencyUseCase @Inject constructor(
     private val repository: Repository,
-    private val mapper: @JvmSuppressWildcards Mapper<CurrencyResponse, CurrencyResponseViewItem>
+    private val mapper: @JvmSuppressWildcards Mapper<CurrencyResponse, CurrencyResponseViewItem>,
+    private val dispatcherProvider: DispatcherProvider
 ) : UseCase.FlowUseCase<CurrencyParams, CurrencyResponseViewItem> {
 
     /**
@@ -62,7 +65,7 @@ class CurrencyUseCase @Inject constructor(
                     result as Result.Error
                     emit(Result.Error(result.failure))
                 }
-            }
+            }.flowOn(dispatcherProvider.default)
     }
 }
 

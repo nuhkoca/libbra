@@ -21,7 +21,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.switchMap
-import androidx.lifecycle.viewModelScope
 import io.github.nuhkoca.libbra.data.Result
 import io.github.nuhkoca.libbra.data.enums.Rate
 import io.github.nuhkoca.libbra.data.model.view.CurrencyResponseViewItem
@@ -29,7 +28,6 @@ import io.github.nuhkoca.libbra.data.succeeded
 import io.github.nuhkoca.libbra.domain.usecase.CurrencyParams
 import io.github.nuhkoca.libbra.domain.usecase.UseCase
 import io.github.nuhkoca.libbra.ui.di.MainScope
-import io.github.nuhkoca.libbra.util.coroutines.DispatcherProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.map
@@ -37,8 +35,7 @@ import javax.inject.Inject
 
 @MainScope
 class CurrencyViewModel @Inject constructor(
-    private val currencyUseCase: @JvmSuppressWildcards UseCase.FlowUseCase<CurrencyParams, CurrencyResponseViewItem>,
-    private val dispatcherProvider: DispatcherProvider
+    private val currencyUseCase: @JvmSuppressWildcards UseCase.FlowUseCase<CurrencyParams, CurrencyResponseViewItem>
 ) : ViewModel() {
 
     private var job = Job()
@@ -101,12 +98,17 @@ class CurrencyViewModel @Inject constructor(
                         errorMessage = result.failure.message
                     )
                 }
-            }.asLiveData(dispatcherProvider.io + viewModelScope.coroutineContext + job)
+            }.asLiveData(job)
             .distinctUntilChanged()
     }
 
     private inline val currentViewState: CurrencyViewState
         get() = _currencyLiveData.value ?: CurrencyViewState()
+
+    override fun onCleared() {
+        super.onCleared()
+        job.cancel()
+    }
 
     /**
      * A data class which represents UI State.

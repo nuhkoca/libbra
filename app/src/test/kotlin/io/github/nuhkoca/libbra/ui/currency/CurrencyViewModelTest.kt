@@ -81,11 +81,7 @@ class CurrencyViewModelTest : BaseTestClass() {
     override fun setUp() {
         super.setUp()
 
-        currencyViewModel =
-            CurrencyViewModel(
-                useCase,
-                coroutinesTestRule.testDispatcherProvider
-            )
+        currencyViewModel = CurrencyViewModel(useCase)
     }
 
     @Test

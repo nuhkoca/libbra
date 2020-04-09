@@ -15,11 +15,13 @@
  */
 package io.github.nuhkoca.libbra.util.keyboard
 
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.Rect
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.Window
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.ComponentActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -27,7 +29,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.github.nuhkoca.libbra.util.ext.i
 import kotlin.math.ceil
 
 // Credit: https://github.com/GuilhE/KeyboardStateEvents
@@ -36,6 +37,17 @@ fun ComponentActivity.bindKeyboardStateEvents() {
 }
 
 fun Fragment.bindKeyboardStateEvents() = requireActivity().bindKeyboardStateEvents()
+
+fun Fragment.dismissKeyboard() = requireActivity().dismissKeyboard()
+
+fun ComponentActivity.dismissKeyboard() {
+    val imm: InputMethodManager =
+        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(
+        findViewById<ViewGroup>(Window.ID_ANDROID_CONTENT).windowToken,
+        0
+    )
+}
 
 fun ViewGroup.isKeyboardOpen(visibleThreshold: Float = 100f): Boolean {
     val measureRect = Rect()
@@ -52,21 +64,17 @@ object KeyboardStateLiveData {
 
     fun post(state: KeyboardState) {
         _state.postValue(state)
-        i { "Keyboard state is $state" }
     }
 }
 
 private class ViewGroupHolder(private val root: ViewGroup) : LifecycleEventObserver {
-
     private val listener = object : ViewTreeObserver.OnGlobalLayoutListener {
         private var previous: Boolean = root.isKeyboardOpen()
 
         override fun onGlobalLayout() {
             root.isKeyboardOpen().let {
                 if (it != previous) {
-                    KeyboardStateLiveData.post(
-                        if (it) KeyboardState.OPEN else KeyboardState.CLOSED
-                    )
+                    KeyboardStateLiveData.post(if (it) KeyboardState.OPEN else KeyboardState.CLOSED)
                     previous = previous.not()
                 }
             }
@@ -86,6 +94,6 @@ private class ViewGroupHolder(private val root: ViewGroup) : LifecycleEventObser
     }
 
     private fun unregisterKeyboardListener() {
-        root.viewTreeObserver.addOnGlobalLayoutListener(listener)
+        root.viewTreeObserver.removeOnGlobalLayoutListener(listener)
     }
 }

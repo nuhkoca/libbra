@@ -80,6 +80,7 @@ class CurrencyUseCaseTest : BaseTestClass() {
     private lateinit var useCase: UseCase.FlowUseCase<CurrencyParams, CurrencyResponseViewItem>
     private val currencySlot = slot<Rate>()
 
+    @ExperimentalCoroutinesApi
     override fun setUp() {
         super.setUp()
 
@@ -94,7 +95,7 @@ class CurrencyUseCaseTest : BaseTestClass() {
 
         every { currencyResponse.baseCurrency } returns "HRK"
 
-        useCase = CurrencyUseCase(repository, mapper)
+        useCase = CurrencyUseCase(repository, mapper, coroutinesTestRule.testDispatcherProvider)
     }
 
     @Test
