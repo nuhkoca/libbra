@@ -28,13 +28,15 @@ import javax.inject.Inject
 class TextBindingAdapter @Inject constructor(private val formatter: Formatter) {
 
     /**
-     * Formats and binds given number.
+     * Formats and binds given number by multiplying with [multiplier].
      *
      * @param amount The amount
+     * @param multiplier The multiplier to multiply amount
      */
-    @BindingAdapter("android:amount")
-    fun TextInputEditText.bindAmount(amount: Float) {
-        val formattedAmount = formatter.formatNumber(amount)
+    @BindingAdapter("android:amount", "android:multiplier", requireAll = true)
+    fun TextInputEditText.bindAmount(amount: Float, multiplier: String) {
+        val formattedMultiplier = Converter.stringToFloat(multiplier)
+        val formattedAmount = formatter.formatNumber(amount * formattedMultiplier)
         setText(formattedAmount)
     }
 

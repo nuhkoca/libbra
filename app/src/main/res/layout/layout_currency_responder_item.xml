@@ -5,9 +5,15 @@
 
     <data>
 
+        <import type="io.github.nuhkoca.libbra.binding.adapters.Converter"></import>
+
         <variable
             name="rate"
             type="io.github.nuhkoca.libbra.data.model.view.RateViewItem" />
+
+        <variable
+            name="bindable"
+            type="io.github.nuhkoca.libbra.ui.currency.BindableMultiplier" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -78,7 +84,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:hint="@{@string/currency_hint}"
-            android:text="@={rate.multiplier}"
+            android:text="@={Converter.floatToString(bindable.multiplier)}"
             android:theme="@style/Currency.EditText"
             app:layout_constraintBottom_toBottomOf="@id/ivResponderThumbnail"
             app:layout_constraintEnd_toEndOf="parent"

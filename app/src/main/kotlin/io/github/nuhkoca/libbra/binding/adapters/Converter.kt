@@ -13,13 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.nuhkoca.libbra.util.widget
+package io.github.nuhkoca.libbra.binding.adapters
 
-/**
- * An object designed to hold current multiplier to calculate each currency based on this.
- */
-object MultiplierHolder {
+import androidx.databinding.InverseMethod
+import io.github.nuhkoca.libbra.util.formatter.CurrencyFormatter
+import io.github.nuhkoca.libbra.util.formatter.Formatter
+
+object Converter {
+
+    private val formatter: Formatter = CurrencyFormatter()
+
+    @InverseMethod("stringToFloat")
+    @JvmStatic
+    fun floatToString(value: Float): String {
+        return formatter.formatNumber(value)
+    }
 
     @JvmStatic
-    var multiplier: Float = 1.0f
+    fun stringToFloat(value: String): Float {
+        val number = formatter.parseText(value)
+        return number.toFloat()
+    }
 }

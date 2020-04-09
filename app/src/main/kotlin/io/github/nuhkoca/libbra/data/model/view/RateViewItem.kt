@@ -16,14 +16,6 @@
 package io.github.nuhkoca.libbra.data.model.view
 
 import androidx.annotation.DrawableRes
-import androidx.databinding.BaseObservable
-import androidx.databinding.Bindable
-import io.github.nuhkoca.libbra.BR
-import io.github.nuhkoca.libbra.util.ext.i
-import io.github.nuhkoca.libbra.util.formatter.CurrencyFormatter
-import io.github.nuhkoca.libbra.util.formatter.Formatter
-import io.github.nuhkoca.libbra.util.widget.MultiplierHolder
-import kotlin.properties.Delegates
 
 /**
  * A data class that includes each currency for view layer
@@ -41,19 +33,4 @@ data class RateViewItem(
     val amount: Float,
     @DrawableRes
     val icon: Int
-) : BaseObservable() {
-
-    @get:Bindable
-    var multiplier: String by Delegates.observable("1.0") { _, _, newValue ->
-        notifyPropertyChanged(BR.multiplier)
-
-        val obtainedMultiplier = if (newValue.isEmpty()) 0f else formatter.parseText(newValue)
-        MultiplierHolder.multiplier = obtainedMultiplier.toFloat()
-
-        i { "Current multiplier is $obtainedMultiplier" }
-    }
-
-    private companion object {
-        private val formatter: Formatter = CurrencyFormatter()
-    }
-}
+)

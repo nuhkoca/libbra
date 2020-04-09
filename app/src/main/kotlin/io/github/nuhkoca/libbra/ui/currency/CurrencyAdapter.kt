@@ -31,7 +31,8 @@ import javax.inject.Inject
 
 @MainScope
 class CurrencyAdapter @Inject constructor(
-    private val itemClickLiveData: SingleLiveEvent<String>
+    private val itemClickLiveData: SingleLiveEvent<String>,
+    private val bindableMultiplier: BindableMultiplier
 ) : ListAdapter<RateViewItem, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -105,6 +106,8 @@ class CurrencyAdapter @Inject constructor(
 
         override fun bindTo(item: RateViewItem) {
             binding.rate = item
+            binding.bindable = bindableMultiplier
+
             super.bindTo(item)
         }
     }
@@ -114,6 +117,7 @@ class CurrencyAdapter @Inject constructor(
 
         override fun bindTo(item: RateViewItem) {
             binding.rate = item
+            binding.bindable = bindableMultiplier
 
             binding.root.setOnClickListener {
                 moveToTop(layoutPosition) {

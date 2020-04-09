@@ -21,6 +21,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
+import io.github.nuhkoca.libbra.ui.currency.BindableMultiplier
 import io.github.nuhkoca.libbra.di.factory.FragmentKey
 import io.github.nuhkoca.libbra.di.factory.ViewModelKey
 import io.github.nuhkoca.libbra.ui.currency.CurrencyAdapter
@@ -50,8 +51,9 @@ internal abstract class MainModule {
         @Provides
         @MainScope
         internal fun provideCurrencyAdapter(
-            itemClickListener: SingleLiveEvent<String>
-        ) = CurrencyAdapter(itemClickListener)
+            itemClickListener: SingleLiveEvent<String>,
+            bindableMultiplier: BindableMultiplier
+        ) = CurrencyAdapter(itemClickListener, bindableMultiplier)
 
         @Provides
         @MainScope
