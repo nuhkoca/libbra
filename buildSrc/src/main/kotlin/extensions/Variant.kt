@@ -17,24 +17,15 @@ package extensions
 
 import com.android.build.gradle.api.ApplicationVariant
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
-import com.android.build.gradle.internal.dsl.BuildType
 import org.gradle.api.DomainObjectSet
-import org.gradle.api.NamedDomainObjectContainer
-import org.gradle.api.Project
 
 private const val APP_NAME_PREFIX = "libbra"
 private const val OUTPUT_EXTENSION = ".apk"
 
 /**
  * Creates custom naming for apk outputs.
- *
- * @param project The project
- * @param namedDomainObjectContainer The build type
  */
-fun DomainObjectSet<ApplicationVariant>.generateApplicationOutputs(
-    project: Project,
-    namedDomainObjectContainer: NamedDomainObjectContainer<BuildType>
-) {
+fun DomainObjectSet<ApplicationVariant>.generateApplicationOutputs() {
     all {
         outputs.all {
             val outputImpl = this as BaseVariantOutputImpl

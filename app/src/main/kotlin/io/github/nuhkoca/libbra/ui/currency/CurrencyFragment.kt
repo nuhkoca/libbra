@@ -65,8 +65,9 @@ class CurrencyFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             itemClickLiveData.observe(viewLifecycleOwner, onChanged = { currency ->
-                viewModel.setBaseCurrency(Rate.valueOf(currency))
-                binding.rvCurrency.smoothSnapToPosition(0)
+                binding.rvCurrency.smoothSnapToPosition(0) {
+                    viewModel.setBaseCurrency(Rate.valueOf(currency))
+                }
             })
             KeyboardStateLiveData.state.observe(viewLifecycleOwner, onChanged = { state ->
                 viewModel.setContinuation(state == KeyboardState.CLOSED)

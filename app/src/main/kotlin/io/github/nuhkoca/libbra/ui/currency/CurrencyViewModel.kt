@@ -59,7 +59,9 @@ class CurrencyViewModel @Inject constructor(
             job = Job()
             refresh()
         } else {
-            job.cancel()
+            if (job.isCancelled.not()) {
+                job.cancel()
+            }
         }
     }
 

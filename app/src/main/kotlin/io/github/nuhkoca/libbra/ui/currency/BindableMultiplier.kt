@@ -15,6 +15,7 @@
  */
 package io.github.nuhkoca.libbra.ui.currency
 
+import androidx.annotation.UiThread
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import io.github.nuhkoca.libbra.BR
@@ -30,13 +31,18 @@ import kotlin.properties.Delegates
 class BindableMultiplier @Inject constructor() : BaseObservable() {
 
     @get:Bindable
-    var multiplier: Float by Delegates.observable(1.0f) { _, _, newValue ->
+    var multiplier: Float by Delegates.observable(DEFAULT_VALUE) { _, _, newValue ->
         notifyPropertyChanged(BR.multiplier)
 
         i { "Current multiplier is $newValue" }
     }
 
+    @UiThread
     fun reset() {
-        multiplier = 1.0f
+        multiplier = DEFAULT_VALUE
+    }
+
+    private companion object {
+        private const val DEFAULT_VALUE = 1.0f
     }
 }

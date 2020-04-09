@@ -58,13 +58,11 @@ fun Project.createDebug(namedDomainObjectContainer: NamedDomainObjectContainer<B
 /**
  * Creates custom naming for apk outputs.
  *
- * @param namedDomainObjectContainer The build type
  * @param domainObjectSet The variant set to generate custom apk naming for each variant
  */
 fun Project.generateApplicationOutputs(
-    namedDomainObjectContainer: NamedDomainObjectContainer<BuildType>,
     domainObjectSet: DomainObjectSet<ApplicationVariant>
-) = domainObjectSet.generateApplicationOutputs(this, namedDomainObjectContainer)
+) = domainObjectSet.generateApplicationOutputs()
 
 /**
  * An extension to create main Kotlin source set.

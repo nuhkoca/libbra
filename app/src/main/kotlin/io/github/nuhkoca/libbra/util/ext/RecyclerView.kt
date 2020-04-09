@@ -51,10 +51,12 @@ fun RecyclerView.addLifecycleAwareScrollListener(
  *
  * @param position The target position to scroll
  * @param snapMode The scroll mode
+ * @param commitCallback The callback
  */
 fun RecyclerView.smoothSnapToPosition(
     position: Int,
-    snapMode: Int = LinearSmoothScroller.SNAP_TO_START
+    snapMode: Int = LinearSmoothScroller.SNAP_TO_START,
+    commitCallback: () -> Unit = {}
 ) {
     val smoothScroller = object : LinearSmoothScroller(context) {
         override fun getVerticalSnapPreference(): Int = snapMode
@@ -65,4 +67,8 @@ fun RecyclerView.smoothSnapToPosition(
     }
     smoothScroller.targetPosition = position
     layoutManager?.startSmoothScroll(smoothScroller)
+
+    if (isAnimating.not()) {
+        commitCallback.invoke()
+    }
 }

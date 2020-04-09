@@ -78,7 +78,7 @@ android {
     buildTypes {
         createRelease(this)
         createDebug(this)
-        generateApplicationOutputs(this, applicationVariants)
+        generateApplicationOutputs(applicationVariants)
 
         forEach { type ->
             if (type.name == "release") {
