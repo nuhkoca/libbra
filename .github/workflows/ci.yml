@@ -22,11 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Ensure .gradle/caches is empty before writing to it.
-      # This helps us stay within Github's cache size limits.
-      - name: Clean Cache
-        run: rm -rf ~/.gradle/caches
-
       - name: Make checksum executable
         run: chmod +x ./checksum.sh
 
@@ -52,7 +47,7 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('checksum.txt') }}
           restore-keys: |
-              ${{ runner.os }}-gradle-
+            ${{ runner.os }}-gradle-
 
   check-style:
     needs: setup
@@ -66,7 +61,7 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('checksum.txt') }}
           restore-keys: |
-              ${{ runner.os }}-gradle-
+            ${{ runner.os }}-gradle-
 
       - name: Run Lint
         run: ./gradlew lintDebug

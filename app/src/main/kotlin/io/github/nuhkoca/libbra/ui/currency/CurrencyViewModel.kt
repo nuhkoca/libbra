@@ -54,7 +54,7 @@ class CurrencyViewModel @Inject constructor(
      *
      * @param isContinue if true flow is resumed otherwise paused
      */
-    fun setContinuation(isContinue: Boolean) = apply {
+    fun setContinuation(isContinue: Boolean) {
         if (isContinue) {
             job = Job()
             refresh()
@@ -66,14 +66,16 @@ class CurrencyViewModel @Inject constructor(
     /**
      * Proceeds with the last known currency in case e.g. network cut off.
      */
-    fun refresh() = apply { baseCurrencyLiveData.value = lastKnownCurrency }
+    fun refresh() {
+        baseCurrencyLiveData.value = lastKnownCurrency
+    }
 
     /**
      * Sets base currency to fetch list of currencies.
      *
      * @param base represents the base currency
      */
-    fun setBaseCurrency(base: Rate) = apply {
+    fun setBaseCurrency(base: Rate) {
         baseCurrencyLiveData.value = base
         lastKnownCurrency = base
     }

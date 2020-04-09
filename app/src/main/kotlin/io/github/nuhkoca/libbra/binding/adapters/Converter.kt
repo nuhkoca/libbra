@@ -19,6 +19,9 @@ import androidx.databinding.InverseMethod
 import io.github.nuhkoca.libbra.util.formatter.CurrencyFormatter
 import io.github.nuhkoca.libbra.util.formatter.Formatter
 
+/**
+ * A DataBinding converter between Float and String to obtain current multiplier.
+ */
 object Converter {
 
     private val formatter: Formatter = CurrencyFormatter()

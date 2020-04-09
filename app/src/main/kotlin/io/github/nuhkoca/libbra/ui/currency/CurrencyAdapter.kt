@@ -121,6 +121,7 @@ class CurrencyAdapter @Inject constructor(
 
             binding.root.setOnClickListener {
                 moveToTop(layoutPosition) {
+                    bindableMultiplier.reset()
                     itemClickLiveData.value = item.abbreviation
                 }
             }

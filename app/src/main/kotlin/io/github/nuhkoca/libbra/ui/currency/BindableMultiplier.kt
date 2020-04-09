@@ -35,4 +35,8 @@ class BindableMultiplier @Inject constructor() : BaseObservable() {
 
         i { "Current multiplier is $newValue" }
     }
+
+    fun reset() {
+        multiplier = 1.0f
+    }
 }
