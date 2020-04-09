@@ -85,6 +85,17 @@ class CurrencyAdapter @Inject constructor(
         }
     }
 
+    /**
+     * Moves tapped item to the top position.
+     *
+     * @param position The layout position
+     * @param commitCallback The function to be called
+     */
+    private fun moveToTop(position: Int, commitCallback: (() -> Unit)) {
+        notifyItemMoved(position, 0)
+        commitCallback.invoke()
+    }
+
     override fun getItemViewType(position: Int): Int {
         return if (position == 0) ITEM_RESPONDER else ITEM_CURRENCY
     }
@@ -105,12 +116,8 @@ class CurrencyAdapter @Inject constructor(
             binding.rate = item
 
             binding.root.setOnClickListener {
-                val list = currentList.toMutableList()
-                list.removeAt(layoutPosition).also { rate ->
-                    list.add(0, rate)
-                    submitList(list) {
-                        itemClickLiveData.value = item.abbreviation
-                    }
+                moveToTop(layoutPosition) {
+                    itemClickLiveData.value = item.abbreviation
                 }
             }
 
