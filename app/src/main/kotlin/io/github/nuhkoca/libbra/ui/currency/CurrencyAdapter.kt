@@ -93,7 +93,10 @@ class CurrencyAdapter @Inject constructor(
      * @param commitCallback The function to be called
      */
     private fun moveToTop(position: Int, commitCallback: (() -> Unit)) {
-        notifyItemMoved(position, 0)
+        currentList.toMutableList().removeAt(position).also { rate ->
+            currentList.toMutableList().add(1, rate)
+        }
+        notifyItemMoved(position, 1)
         commitCallback.invoke()
     }
 
