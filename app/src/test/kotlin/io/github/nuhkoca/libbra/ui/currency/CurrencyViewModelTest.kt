@@ -27,12 +27,12 @@ import io.github.nuhkoca.libbra.data.model.view.CurrencyResponseViewItem
 import io.github.nuhkoca.libbra.data.shared.rule.CoroutinesTestRule
 import io.github.nuhkoca.libbra.domain.usecase.CurrencyParams
 import io.github.nuhkoca.libbra.domain.usecase.UseCase
+import io.github.nuhkoca.libbra.shared.LifeCycleTestOwner
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.mockk
-import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.emptyFlow
@@ -75,13 +75,17 @@ class CurrencyViewModelTest : BaseTestClass() {
      -------------------------
     */
     private lateinit var currencyViewModel: CurrencyViewModel
-    private val currencySlot = slot<Rate>()
+    private lateinit var lifeCycleTestOwner: LifeCycleTestOwner
 
     @ExperimentalCoroutinesApi
     override fun setUp() {
         super.setUp()
 
+        lifeCycleTestOwner = LifeCycleTestOwner()
+        lifeCycleTestOwner.onCreate()
+
         currencyViewModel = CurrencyViewModel(useCase)
+        currencyViewModel.currencyLiveData.observe(lifeCycleTestOwner, observer)
     }
 
     @Test
@@ -98,7 +102,7 @@ class CurrencyViewModelTest : BaseTestClass() {
             )
         }
 
-        currencyViewModel.currencyLiveData.observeForever(observer)
+        lifeCycleTestOwner.onResume()
 
         currencyViewModel.setContinuation(true)
         currencyViewModel.setBaseCurrency(Rate.EUR)
@@ -124,7 +128,7 @@ class CurrencyViewModelTest : BaseTestClass() {
             flowOf(Result.Error(Failure.ServerFailure("Couldn't connect the server.")))
         }
 
-        currencyViewModel.currencyLiveData.observeForever(observer)
+        lifeCycleTestOwner.onResume()
 
         currencyViewModel.setContinuation(true)
         currencyViewModel.setBaseCurrency(Rate.EUR)
@@ -148,7 +152,7 @@ class CurrencyViewModelTest : BaseTestClass() {
     fun `network process should not happen in case of pause`() {
         every { useCase.execute(any()) } returns emptyFlow()
 
-        currencyViewModel.currencyLiveData.observeForever(observer)
+        lifeCycleTestOwner.onResume()
 
         currencyViewModel.setContinuation(false)
         currencyViewModel.setBaseCurrency(Rate.EUR)
@@ -160,5 +164,12 @@ class CurrencyViewModelTest : BaseTestClass() {
         verify(atLeast = 1) { useCase.execute(any()) }
 
         confirmVerified(useCase)
+    }
+
+    override fun tearDown() {
+        super.tearDown()
+        lifeCycleTestOwner.onDestroy()
+        currencyViewModel.currencyLiveData.removeObserver(observer)
+        currencyViewModel.currencyLiveData.removeObservers(lifeCycleTestOwner)
     }
 }
