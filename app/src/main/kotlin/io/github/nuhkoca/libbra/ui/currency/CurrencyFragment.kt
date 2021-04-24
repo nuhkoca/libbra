@@ -21,7 +21,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.observe
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import io.github.nuhkoca.libbra.R
@@ -64,12 +63,12 @@ class CurrencyFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            itemClickLiveData.observe(viewLifecycleOwner, onChanged = { currency ->
+            itemClickLiveData.observe(viewLifecycleOwner, { currency ->
                 binding.rvCurrency.smoothSnapToPosition(0) {
                     viewModel.setBaseCurrency(Rate.valueOf(currency))
                 }
             })
-            KeyboardStateLiveData.state.observe(viewLifecycleOwner, onChanged = { state ->
+            KeyboardStateLiveData.state.observe(viewLifecycleOwner, { state ->
                 viewModel.setContinuation(state == KeyboardState.CLOSED)
             })
             bindKeyboardStateEvents()
@@ -93,7 +92,7 @@ class CurrencyFragment @Inject constructor(
     }
 
     private fun observeViewModel() = with(viewModel) {
-        currencyLiveData.observe(viewLifecycleOwner, onChanged = { state ->
+        currencyLiveData.observe(viewLifecycleOwner, { state ->
             binding.pbCurrency.isVisible = state.isLoading
             mergedBinding.root.isVisible = state.hasError
             binding.srlCurrency.isRefreshing = false

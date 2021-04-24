@@ -100,12 +100,12 @@ internal object TestDependencies {
     const val orchestrator = "androidx.test:orchestrator:${Versions.orchestrator}"
 
     // AndroidJUnitRunner and JUnit Rules
-    const val runner = "androidx.test:runner:${Versions.runner}"
-    const val rules = "androidx.test:rules:${Versions.rules}"
+    const val runner = "androidx.test:runner:${Versions.test_core}"
+    const val rules = "androidx.test:rules:${Versions.test_core}"
 
     // Assertions
     const val junit = "androidx.test.ext:junit:${Versions.junit}"
-    const val truth_ext = "androidx.test.ext:truth:${Versions.truth_ext}"
+    const val truth_ext = "androidx.test.ext:truth:${Versions.test_core}"
 
     // Espresso dependencies
     const val espresso_core = "androidx.test.espresso:espresso-core:${Versions.espresso_core}"

@@ -17,6 +17,7 @@ package io.github.nuhkoca.libbra.domain.mapper
 
 import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
+import io.github.nuhkoca.libbra.R
 import io.github.nuhkoca.libbra.data.enums.Rate
 import io.github.nuhkoca.libbra.data.model.domain.CurrencyResponse
 import io.github.nuhkoca.libbra.data.model.view.CurrencyResponseViewItem
@@ -86,21 +87,21 @@ class CurrencyViewItemMapperTest {
                         abbreviation = "EUR",
                         longName = "Euro",
                         amount = 1.0f,
-                        icon = 2131230839
+                        icon = R.drawable.ic_eur
                     ),
                     RateViewItem(
                         id = 1,
                         abbreviation = "BGN",
                         longName = "Bulgarian Lev",
                         amount = 3.9f,
-                        icon = 2131230829
+                        icon = R.drawable.ic_bgn
                     ),
                     RateViewItem(
                         id = 2,
                         abbreviation = "CHF",
                         longName = "Swiss Franc",
                         amount = 2.1f,
-                        icon = 2131230833
+                        icon = R.drawable.ic_chf
                     )
                 )
             ).inOrder()

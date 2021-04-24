@@ -20,7 +20,7 @@ import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 import coil.ImageLoader
-import coil.api.load
+import coil.load
 import coil.target.Target
 import io.github.nuhkoca.libbra.binding.di.BindingScope
 import io.github.nuhkoca.libbra.util.ext.e

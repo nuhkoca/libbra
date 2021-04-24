@@ -212,5 +212,5 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          arch: x86_64
+          arch: x86
           script: ./gradlew connectedDebugAndroidTest

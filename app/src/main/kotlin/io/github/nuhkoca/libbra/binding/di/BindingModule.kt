@@ -17,7 +17,6 @@ package io.github.nuhkoca.libbra.binding.di
 
 import android.content.Context
 import coil.ImageLoader
-import coil.ImageLoaderBuilder
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -42,10 +41,11 @@ internal abstract class BindingModule {
 
         @Provides
         @BindingScope
-        internal fun provideImageLoader(context: Context) = ImageLoaderBuilder(context).apply {
-            availableMemoryPercentage(DEFAULT_MEMORY_MULTIPLIER)
-            crossfade(true)
-        }.build()
+        internal fun provideImageLoader(context: Context) =
+            ImageLoader(context).newBuilder().apply {
+                availableMemoryPercentage(DEFAULT_MEMORY_MULTIPLIER)
+                crossfade(true)
+            }.build()
 
         @Provides
         @InternalApi

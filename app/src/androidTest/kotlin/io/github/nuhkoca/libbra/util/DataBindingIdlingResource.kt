@@ -18,10 +18,11 @@ package io.github.nuhkoca.libbra.util
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.testing.FragmentScenario
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingResource
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import java.util.*
 
 /**
@@ -30,12 +31,8 @@ import java.util.*
  *
  * Since this application only uses fragments, the resource only checks the fragments and their
  * children instead of the whole view tree.
- *
- * Tracking bug: https://github.com/android/android-test/issues/317
  */
-class DataBindingIdlingResource(
-    activityScenarioRule: ActivityScenarioRule<out FragmentActivity>
-) : IdlingResource {
+class DataBindingIdlingResource : IdlingResource {
     // list of registered callbacks
     private val idlingCallbacks = mutableListOf<IdlingResource.ResourceCallback>()
 
@@ -50,10 +47,6 @@ class DataBindingIdlingResource(
     lateinit var activity: FragmentActivity
 
     override fun getName() = "DataBinding $id"
-
-    init {
-        monitorActivity(activityScenarioRule.scenario)
-    }
 
     override fun isIdleNow(): Boolean {
         val idle = !getBindings().any { it.hasPendingBindings() }
@@ -79,17 +72,6 @@ class DataBindingIdlingResource(
     }
 
     /**
-     * Sets the activity from an [ActivityScenario] to be used from [DataBindingIdlingResource].
-     */
-    private fun monitorActivity(
-        activityScenario: ActivityScenario<out FragmentActivity>
-    ) {
-        activityScenario.onActivity {
-            this.activity = it
-        }
-    }
-
-    /**
      * Find all binding classes in all currently available fragments.
      */
     private fun getBindings(): List<ViewDataBinding> {
@@ -109,3 +91,25 @@ class DataBindingIdlingResource(
 }
 
 private fun View.getBinding(): ViewDataBinding? = DataBindingUtil.getBinding(this)
+
+/**
+ * Sets the activity from an [ActivityScenario] to be used from [DataBindingIdlingResource].
+ */
+fun <T : FragmentActivity> DataBindingIdlingResource.monitorActivity(
+    activityScenario: ActivityScenario<T>
+) {
+    activityScenario.onActivity {
+        this.activity = it
+    }
+}
+
+/**
+ * Sets the fragment from a [FragmentScenario] to be used from [DataBindingIdlingResource].
+ */
+fun <T : Fragment> DataBindingIdlingResource.monitorFragment(
+    fragmentScenario: FragmentScenario<T>
+) {
+    fragmentScenario.onFragment {
+        this.activity = it.requireActivity()
+    }
+}
