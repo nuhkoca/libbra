@@ -39,15 +39,15 @@ jobs:
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-      - name: Check Dependency Updates
-        run: ./gradlew dependencyUpdates -Drevision=release
-
       - uses: actions/cache@v2
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('checksum.txt') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
+      - name: Check Dependency Updates
+        run: ./gradlew dependencyUpdates -Drevision=release
 
   check-style:
     needs: setup
@@ -157,7 +157,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Make checksum executable
-       run: chmod +x ./checksum.sh
+        run: chmod +x ./checksum.sh
 
       - name: Install JDK 1.8
         uses: actions/setup-java@v1
