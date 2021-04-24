@@ -66,7 +66,6 @@ internal object Debug : BuildTypeCreator {
             versionNameSuffix = "-dev-${project.gitSha}"
             isDebuggable = true
             isMinifyEnabled = false
-            isUseProguard = false
         }
     }
 }
@@ -85,9 +84,11 @@ internal object Release : BuildTypeCreator {
             isMinifyEnabled = true
             isDebuggable = false
             isShrinkResources = true
-            isUseProguard = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt", project),
+                getDefaultProguardFile(
+                    "proguard-android-optimize.txt",
+                    project.layout.buildDirectory
+                ),
                 "proguard-rules.pro"
             )
         }

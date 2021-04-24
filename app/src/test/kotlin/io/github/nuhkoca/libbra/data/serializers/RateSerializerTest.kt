@@ -18,9 +18,7 @@ package io.github.nuhkoca.libbra.data.serializers
 import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
 import io.github.nuhkoca.libbra.data.enums.Rate
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
@@ -40,28 +38,25 @@ class RateSerializerTest {
     private val serializer = RateSerializer
 
     @Test
-    @UnstableDefault
     fun `serializer should serialize the given enum object properly`() {
         // Given
         val rate = Rate.BRL
 
         // When
-        val rateAsString = Json(JsonConfiguration(unquotedPrint = true))
-            .stringify(serializer, rate)
+        val rateAsString = Json.encodeToString(serializer, rate)
 
         // Then
         assertThat(rateAsString).isNotEmpty()
-        assertThat(rateAsString).isEqualTo(rate.name)
+        assertThat(rateAsString).isEqualTo("\"${rate.name}\"")
     }
 
     @Test
-    @UnstableDefault
     fun `serializer should parse the given string to corresponding enum type`() {
         // Given
         val rateAsString = "CZK"
 
         // When
-        val rate = Json(JsonConfiguration(isLenient = true)).parse(serializer, rateAsString)
+        val rate = Json { isLenient = true }.decodeFromString(serializer, rateAsString)
 
         // Then
         assertThat(rate).isNotNull()
@@ -70,13 +65,12 @@ class RateSerializerTest {
     }
 
     @Test
-    @UnstableDefault
     fun `serializer should map undefined item to UNKNOWN type`() {
         // Given
         val rateAsString = "UND"
 
         // When
-        val rate = Json(JsonConfiguration(isLenient = true)).parse(serializer, rateAsString)
+        val rate = Json { isLenient = true }.decodeFromString(serializer, rateAsString)
 
         // Then
         assertThat(rate).isNotNull()

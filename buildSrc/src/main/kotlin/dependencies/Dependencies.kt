@@ -21,6 +21,8 @@ object Dependencies {
         const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}"
         const val coroutines =
             "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
+        const val serialization_json =
+            "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinx_serialization_json}"
     }
 
     object Lint {
@@ -88,8 +90,8 @@ internal object TestDependencies {
     const val arch_core = "androidx.arch.core:core-testing:${Versions.arch_core}"
     const val coroutines_core =
         "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
-    const val serialization_runtime =
-        "org.jetbrains.kotlinx:kotlinx-serialization-runtime:${Versions.kotlinx_serialization_runtime}"
+    const val serialization_json =
+        "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinx_serialization_json}"
 
     // Fragment
     const val fragment = "androidx.fragment:fragment-testing:${Versions.fragment}"

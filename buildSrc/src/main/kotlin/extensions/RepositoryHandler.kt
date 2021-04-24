@@ -23,7 +23,11 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler
 fun RepositoryHandler.applyDefaults() {
     google()
     mavenCentral()
-
-    // Make this a caching provider
-    jcenter()
+    jcenter {
+        content {
+            // Only download the 'kotlinx-html-jvm' module from JCenter, but nothing else.
+            // detekt needs 'kotlinx-html-jvm' for the HTML report.
+            includeModule("org.jetbrains.kotlinx", "kotlinx-html-jvm")
+        }
+    }
 }

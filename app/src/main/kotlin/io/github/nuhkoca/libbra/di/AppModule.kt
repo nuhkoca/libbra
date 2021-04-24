@@ -38,7 +38,6 @@ import io.github.nuhkoca.libbra.util.coroutines.DefaultDispatcherProvider
 import io.github.nuhkoca.libbra.util.coroutines.DispatcherProvider
 import io.github.nuhkoca.libbra.util.ext.errorInterceptor
 import io.github.nuhkoca.libbra.util.mapper.Mapper
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -101,7 +100,6 @@ abstract class AppModule {
 
         @Provides
         @Singleton
-        @UnstableDefault
         internal fun provideRetrofit(@InternalApi httpClient: OkHttpClient): Retrofit {
             return Retrofit.Builder().apply {
                 baseUrl(BuildConfig.BASE_URL)
@@ -113,7 +111,6 @@ abstract class AppModule {
         @Provides
         @Singleton
         @InternalApi
-        @UnstableDefault
         internal fun provideOkHttpClient(
             @InternalApi loggingInterceptor: HttpLoggingInterceptor
         ): OkHttpClient {

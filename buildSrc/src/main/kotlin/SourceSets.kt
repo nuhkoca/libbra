@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.android.build.gradle.api.AndroidSourceSet
+@file:Suppress("UnstableApiUsage")
+
+import com.android.build.api.dsl.AndroidSourceSet
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
 

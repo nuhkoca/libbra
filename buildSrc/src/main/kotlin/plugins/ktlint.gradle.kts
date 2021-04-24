@@ -25,10 +25,7 @@ apply<KtlintPlugin>()
 
 configure<KtlintExtension> {
     version.set(Versions.ktlint_internal)
-    debug.set(true)
-    verbose.set(true)
     android.set(false)
-    outputToConsole.set(true)
     outputColorName.set(Config.KTLINT_COLOR_NAME)
     ignoreFailures.set(true)
     enableExperimentalRules.set(true)

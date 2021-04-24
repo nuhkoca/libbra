@@ -19,17 +19,11 @@ import tasks.BuildTasks
 
 buildscript {
     repositories {
-        google()
         mavenCentral()
-
-        // Make this a caching provider
-        jcenter()
     }
 }
 
-plugins.apply(BuildPlugins.DETEKT)
 plugins.apply(BuildPlugins.UPDATE_DEPENDENCIES)
-plugins.apply(BuildPlugins.KTLINT)
 plugins.apply(BuildPlugins.GIT_HOOKS)
 
 allprojects {
@@ -38,9 +32,6 @@ allprojects {
     plugins.apply(BuildPlugins.DETEKT)
     plugins.apply(BuildPlugins.KTLINT)
     plugins.apply(BuildPlugins.SPOTLESS)
-}
-
-subprojects {
     plugins.apply(BuildTasks.COMMON_TASKS)
 
     apply {

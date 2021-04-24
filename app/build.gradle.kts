@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("UNCHECKED_CAST")
+
+import com.android.build.api.dsl.AndroidSourceSet
 import common.addJUnit5TestDependencies
 import common.addOkHttpBom
 import common.addTestDependencies
@@ -33,7 +36,6 @@ import utils.javaVersion
 plugins {
     id(Plugins.androidApplication)
     kotlin(Plugins.kotlinAndroid)
-    kotlin(Plugins.kotlinAndroidExtension)
     kotlin(Plugins.kotlinKapt)
     id(Plugins.kotlinSerialization)
     id(Plugins.junit5)
@@ -90,9 +92,9 @@ android {
     }
 
     sourceSets {
-        createKotlinMain(this)
-        createKotlinTest(this)
-        createKotlinAndroidTest(this)
+        createKotlinMain(this as NamedDomainObjectContainer<AndroidSourceSet>)
+        createKotlinTest(this as NamedDomainObjectContainer<AndroidSourceSet>)
+        createKotlinAndroidTest(this as NamedDomainObjectContainer<AndroidSourceSet>)
     }
 
     compileOptions {
@@ -104,16 +106,9 @@ android {
         jvmTarget = javaVersion.toString()
     }
 
-    androidExtensions {
-        isExperimental = true
-    }
-
-    dataBinding {
-        isEnabled = true
-    }
-
-    viewBinding {
-        isEnabled = true
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
     }
 
     lintOptions.setDefaults()
@@ -123,10 +118,11 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    lintChecks(project(Modules.lintRules))
+    lintPublish(project(Modules.lintRules))
 
     implementation(Dependencies.Core.kotlin)
     implementation(Dependencies.Core.coroutines)
+    implementation(Dependencies.Core.serialization_json)
 
     implementation(Dependencies.UI.material)
     implementation(Dependencies.UI.core_ktx)

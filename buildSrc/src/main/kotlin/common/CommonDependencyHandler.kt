@@ -34,7 +34,7 @@ fun DependencyHandler.addTestDependencies() {
     testImplementation(TestDependencies.arch_core)
     testImplementation(TestDependencies.coroutines_core)
     testImplementation(TestDependencies.mock_web_server)
-    testImplementation(TestDependencies.serialization_runtime)
+    testImplementation(TestDependencies.serialization_json)
 
     androidTestImplementation(TestDependencies.test_core)
     androidTestImplementation(TestDependencies.junit)

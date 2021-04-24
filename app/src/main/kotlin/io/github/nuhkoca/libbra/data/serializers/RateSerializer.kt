@@ -17,17 +17,15 @@ package io.github.nuhkoca.libbra.data.serializers
 
 import io.github.nuhkoca.libbra.data.enums.Rate
 import io.github.nuhkoca.libbra.util.ext.w
-import kotlinx.serialization.Decoder
-import kotlinx.serialization.Encoder
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.PrimitiveDescriptor
-import kotlinx.serialization.PrimitiveKind
-import kotlinx.serialization.SerialDescriptor
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.Serializer
 import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.decode
-import kotlinx.serialization.encode
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 /**
  * A custom [KSerializer] implementation to serialize and deserialize [Rate] elements.
@@ -39,7 +37,7 @@ object RateSerializer : KSerializer<Rate> {
 
     private val serializer = String.serializer()
 
-    override val descriptor: SerialDescriptor = PrimitiveDescriptor(
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
         SERIAL_NAME,
         PrimitiveKind.STRING
     )
@@ -58,7 +56,7 @@ object RateSerializer : KSerializer<Rate> {
     override fun deserialize(decoder: Decoder): Rate {
         var type: String? = null
         return try {
-            type = decoder.decode(serializer)
+            type = decoder.decodeString()
             Rate.valueOf(type)
         } catch (e: RuntimeException) {
             w { "Falling back to UNKNOWN type as there is no match found for $type." }
@@ -67,6 +65,6 @@ object RateSerializer : KSerializer<Rate> {
     }
 
     override fun serialize(encoder: Encoder, value: Rate) {
-        encoder.encode(serializer, value.name)
+        encoder.encodeSerializableValue(serializer, value.name)
     }
 }

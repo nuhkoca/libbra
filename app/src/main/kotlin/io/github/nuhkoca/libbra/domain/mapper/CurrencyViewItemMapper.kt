@@ -49,16 +49,16 @@ class CurrencyViewItemMapper @Inject constructor(
 
         item.rates.forEachIndexed { index, currency ->
             val rateViewItem = RateViewItem(
-                index + 1,
-                currency.rate.name,
-                currency.rate.longName,
-                currency.amount,
-                currency.rate.resId
+                id = index + 1,
+                abbreviation = currency.rate.name,
+                longName = currency.rate.longName,
+                amount = currency.amount,
+                icon = currency.rate.resId
             )
-            rates.add(index + 1, rateViewItem)
+            rates.add(index = index + 1, element = rateViewItem)
         }
 
-        CurrencyResponseViewItem(item.baseCurrency, rates)
+        CurrencyResponseViewItem(baseCurrency = item.baseCurrency, rates = rates)
     }
 }
 
@@ -71,11 +71,11 @@ private infix fun MutableList<RateViewItem>.with(baseCurrency: String) {
     // Add base currency to currency list to show it at top.
     val rate = Rate.valueOf(baseCurrency)
     val responder = RateViewItem(
-        0, // First id should always be 0
-        rate.name,
-        rate.longName,
-        1.0f, // Because base currency amount is always 1
-        rate.resId
+        id = 0, // First id should always be 0
+        abbreviation = rate.name,
+        longName = rate.longName,
+        amount = 1.0f, // Because base currency amount is always 1
+        icon = rate.resId
     )
-    add(0, responder)
+    add(index = 0, element = responder)
 }

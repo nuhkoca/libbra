@@ -25,22 +25,18 @@ import io.github.nuhkoca.libbra.data.failure.Failure.SerializationFailure
 import io.github.nuhkoca.libbra.data.failure.Failure.ServerFailure
 import io.github.nuhkoca.libbra.data.failure.Failure.UnhandledFailure
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonDecodingException
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import java.io.IOException
 import java.util.concurrent.CancellationException
 
-@UnstableDefault
 fun OkHttpClient.Builder.errorInterceptor() = ErrorInterceptor()
 
 /**
  * An [Interceptor] implementation for error handling.
  */
-@UnstableDefault
 class ErrorInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -63,7 +59,6 @@ class ErrorInterceptor : Interceptor {
      * @throws SerializationException
      */
     @Suppress("TooGenericExceptionCaught", "ThrowsCount")
-    @UnstableDefault
     @Throws(IOException::class, SerializationException::class)
     private fun checkError(response: Response) {
         if (response.isSuccessful) return
@@ -75,11 +70,11 @@ class ErrorInterceptor : Interceptor {
         val errorString = errorBody.string()
 
         try {
-            val errorResponse = Json.parse(ErrorResponse.serializer(), errorString)
+            val errorResponse = Json.decodeFromString(ErrorResponse.serializer(), errorString)
             throw ServerFailure(errorResponse.message)
         } catch (e: Exception) {
             when (e) {
-                is SerializationException, is JsonDecodingException -> {
+                is SerializationException -> {
                     throw SerializationFailure(e.message.toString())
                 }
                 is ServerFailure -> throw ServerFailure(e.message)

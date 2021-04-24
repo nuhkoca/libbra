@@ -39,3 +39,9 @@ dependencies {
 
     testImplementation(Dependencies.Lint.tests)
 }
+
+val jar by tasks.getting(Jar::class) {
+    manifest {
+        attributes["Lint-Registry-v2"] = "io.github.nuhkoca.rules.IssueRegistry"
+    }
+}
