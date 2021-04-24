@@ -213,4 +213,4 @@ jobs:
         with:
           api-level: 29
           arch: x86
-          script: ./gradlew connectedDebugAndroidTest
+          script: ./gradlew connectedAndroidTest
