@@ -167,7 +167,7 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '8'
-          
+
       - name: Generate cache key
         run: ./checksum.sh checksum.txt
 

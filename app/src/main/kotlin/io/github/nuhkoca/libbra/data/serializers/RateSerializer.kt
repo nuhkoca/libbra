@@ -17,6 +17,7 @@ package io.github.nuhkoca.libbra.data.serializers
 
 import io.github.nuhkoca.libbra.data.enums.Rate
 import io.github.nuhkoca.libbra.util.ext.w
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.Serializer
@@ -31,6 +32,7 @@ import kotlinx.serialization.encoding.Encoder
  * A custom [KSerializer] implementation to serialize and deserialize [Rate] elements.
  */
 @Serializer(forClass = Rate::class)
+@OptIn(ExperimentalSerializationApi::class)
 object RateSerializer : KSerializer<Rate> {
 
     private const val SERIAL_NAME = "rates"

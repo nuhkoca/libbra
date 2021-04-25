@@ -28,6 +28,7 @@ import io.github.nuhkoca.libbra.shared.dispatcher.TimeoutDispatcher
 import io.github.nuhkoca.libbra.util.ext.ErrorInterceptor
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -58,6 +59,7 @@ class CurrencyServiceTest {
     private lateinit var currencyService: CurrencyService
 
     @Before
+    @OptIn(ExperimentalSerializationApi::class)
     fun setUp() {
         mockWebServer.start()
 

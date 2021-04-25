@@ -38,6 +38,7 @@ class CurrencyFormatter @Inject constructor() : Formatter {
         }
     }
 
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     override fun parseText(text: String): Number {
         return try {
             formatter.parse(text)

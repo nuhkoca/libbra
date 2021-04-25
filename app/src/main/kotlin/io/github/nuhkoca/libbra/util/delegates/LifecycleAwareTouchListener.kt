@@ -19,7 +19,6 @@ import android.view.MotionEvent
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import io.github.nuhkoca.libbra.util.keyboard.dismissKeyboard
 import io.github.nuhkoca.libbra.util.keyboard.isKeyboardOpen
@@ -51,8 +50,7 @@ class LifecycleAwareTouchListener(
             override fun onCreate(owner: LifecycleOwner) {
                 recyclerView.addOnItemTouchListener(defaultItemTouchListener)
                 fragment.viewLifecycleOwnerLiveData.observe(
-                    fragment,
-                    onChanged = { viewLifecycleOwner ->
+                    fragment, { viewLifecycleOwner ->
                         viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
                             override fun onDestroy(owner: LifecycleOwner) {
                                 recyclerView.removeOnItemTouchListener(defaultItemTouchListener)

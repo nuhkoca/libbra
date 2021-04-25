@@ -18,7 +18,6 @@ package io.github.nuhkoca.libbra.util.delegates
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import io.github.nuhkoca.libbra.util.ext.i
 
@@ -48,8 +47,7 @@ class LifecycleAwareScrollListener(
             override fun onCreate(owner: LifecycleOwner) {
                 recyclerView.addOnScrollListener(scrollListener)
                 fragment.viewLifecycleOwnerLiveData.observe(
-                    fragment,
-                    onChanged = { viewLifecycleOwner ->
+                    fragment, { viewLifecycleOwner ->
                         viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
                             override fun onDestroy(owner: LifecycleOwner) {
                                 recyclerView.removeOnScrollListener(scrollListener)
