@@ -131,7 +131,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Create Build Report
-        uses: eskatos/gradle-command-action@v1
+        uses: eskatos/gradle-command-action@v2
         with:
           arguments: assembleDebug --scan
           failOnError: true
