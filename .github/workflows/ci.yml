@@ -96,7 +96,7 @@ jobs:
         run: find . -type d -name 'reports' | zip -@ -r build-reports.zip
       - name: (Fail-only) Upload the build report
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: error-report
           path: build-reports.zip
@@ -138,7 +138,7 @@ jobs:
         id: gradle
 
       - name: Upload Sample Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: apk
