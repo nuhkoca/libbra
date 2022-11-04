@@ -145,7 +145,7 @@ jobs:
           path: app/build/outputs/apk/
 
       - name: Publish Build Report As Comment If Failure
-        uses: mshick/add-pr-comment@v1
+        uses: mshick/add-pr-comment@v2
         if: failure()
         with:
           message: Build failed ${{ steps.gradle.outputs.build-scan-url }}
