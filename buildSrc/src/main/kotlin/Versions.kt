@@ -28,7 +28,7 @@ internal object Versions {
     const val fragment_ktx = "1.3.3"
     const val recyclerview = "1.2.0"
     const val constraint_layout = "2.0.4"
-    const val swipe_refresh_layout = "1.1.0-beta01"
+    const val swipe_refresh_layout = "1.1.0"
 
     // Navigation
     const val android_navigation = "2.3.5"
