@@ -45,7 +45,7 @@ internal object Versions {
     const val okhttp = "4.9.1"
 
     // Other stuff
-    const val lottie = "3.7.0"
+    const val lottie = "3.7.2"
     const val timber = "4.7.1"
     const val coil = "1.2.0"
     const val detekt = "1.16.0"
