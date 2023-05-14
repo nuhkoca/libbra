@@ -58,7 +58,7 @@ internal object Versions {
     const val mockK = "1.11.0"
     const val arch_core = "2.2.0"
     const val jupiter = "5.7.1"
-    const val android_test_runner = "1.2.2"
+    const val android_test_runner = "1.3.0"
     const val fragment = "1.3.3"
     const val orchestrator = "1.2.0"
 }
