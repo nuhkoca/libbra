@@ -60,5 +60,5 @@ internal object Versions {
     const val jupiter = "5.7.1"
     const val android_test_runner = "1.3.0"
     const val fragment = "1.3.3"
-    const val orchestrator = "1.2.0"
+    const val orchestrator = "1.4.2"
 }
