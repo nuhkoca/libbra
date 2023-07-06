@@ -15,7 +15,7 @@
  */
 internal object Versions {
     // Core
-    const val kotlin = "1.8.22"
+    const val kotlin = "1.9.0"
     const val kotlinx_serialization_json = "1.5.1"
     const val coroutines = "1.7.2"
     const val lint = "31.0.2"
