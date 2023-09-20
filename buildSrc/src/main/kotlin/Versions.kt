@@ -31,7 +31,7 @@ internal object Versions {
     const val swipe_refresh_layout = "1.1.0"
 
     // Navigation
-    const val android_navigation = "2.7.2"
+    const val android_navigation = "2.7.3"
 
     // Lifecycle
     const val lifecycle = "2.6.2"
