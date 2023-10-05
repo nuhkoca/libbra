@@ -21,7 +21,7 @@ internal object Versions {
     const val lint = "31.1.1"
 
     // UI
-    const val material = "1.9.0"
+    const val material = "1.10.0"
     const val core = "1.12.0"
     const val appcompat = "1.6.1"
     const val activity_ktx = "1.7.2"
