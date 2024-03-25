@@ -48,7 +48,7 @@ internal object Versions {
     const val lottie = "6.4.0"
     const val timber = "5.0.1"
     const val coil = "2.6.0"
-    const val detekt = "1.23.5"
+    const val detekt = "1.23.6"
     const val ktlint_internal = "0.36.0"
 
     // Test stuff
