@@ -40,7 +40,7 @@ internal object Versions {
     const val dagger = "2.51"
 
     // Retrofit & OkHttp
-    const val retrofit = "2.10.0"
+    const val retrofit = "2.11.0"
     const val retrofit_serialization_adapter = "1.0.0"
     const val okhttp = "4.12.0"
 
