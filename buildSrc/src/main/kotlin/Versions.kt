@@ -34,7 +34,7 @@ internal object Versions {
     const val android_navigation = "2.7.7"
 
     // Lifecycle
-    const val lifecycle = "2.8.1"
+    const val lifecycle = "2.8.2"
 
     // Dagger
     const val dagger = "2.51.1"
