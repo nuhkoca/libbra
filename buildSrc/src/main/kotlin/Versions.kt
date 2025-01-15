@@ -24,7 +24,7 @@ internal object Versions {
     const val material = "1.12.0"
     const val core = "1.15.0"
     const val appcompat = "1.7.0"
-    const val activity_ktx = "1.9.3"
+    const val activity_ktx = "1.10.0"
     const val fragment_ktx = "1.8.5"
     const val recyclerview = "1.3.2"
     const val constraint_layout = "2.2.0"
