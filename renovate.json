@@ -2,6 +2,7 @@
   "extends": [
     "config:base"
   ],
+  "requiredStatusChecks": null,
   "rebaseWhen": "conflicted",
   "minor": {
     "automerge": true
@@ -13,6 +14,9 @@
     "automerge": true
   },
   "digest": {
+    "automerge": true
+  },
+  "major": {
     "automerge": true
   }
 }
