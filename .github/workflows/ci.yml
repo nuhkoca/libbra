@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Make checksum executable
         run: chmod +x ./checksum.sh
@@ -55,7 +55,7 @@ jobs:
     name: Check Style
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Make checksum executable
         run: chmod +x ./checksum.sh
@@ -106,7 +106,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Make checksum executable
         run: chmod +x ./checksum.sh
@@ -157,7 +157,7 @@ jobs:
     name: Unit Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Make checksum executable
         run: chmod +x ./checksum.sh
@@ -189,7 +189,7 @@ jobs:
     name: Instrumentation Test
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Make checksum executable
         run: chmod +x ./checksum.sh
