@@ -54,7 +54,7 @@ internal object Versions {
     // Test stuff
     const val test_core = "1.6.2"
     const val junit = "1.3.0"
-    const val espresso_core = "3.6.1"
+    const val espresso_core = "3.7.0"
     const val mockK = "1.14.5"
     const val arch_core = "2.2.0"
     const val jupiter = "5.13.4"
