@@ -52,7 +52,7 @@ internal object Versions {
     const val ktlint_internal = "0.36.0"
 
     // Test stuff
-    const val test_core = "1.6.2"
+    const val test_core = "1.7.0"
     const val junit = "1.3.0"
     const val espresso_core = "3.7.0"
     const val mockK = "1.14.5"
