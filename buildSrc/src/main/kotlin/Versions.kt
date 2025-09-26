@@ -37,7 +37,7 @@ internal object Versions {
     const val lifecycle = "2.9.4"
 
     // Dagger
-    const val dagger = "2.57.1"
+    const val dagger = "2.57.2"
 
     // Retrofit & OkHttp
     const val retrofit = "3.0.0"
