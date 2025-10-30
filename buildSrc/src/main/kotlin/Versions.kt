@@ -42,7 +42,7 @@ internal object Versions {
     // Retrofit & OkHttp
     const val retrofit = "3.0.0"
     const val retrofit_serialization_adapter = "1.0.0"
-    const val okhttp = "5.2.1"
+    const val okhttp = "5.3.0"
 
     // Other stuff
     const val lottie = "6.7.0"
