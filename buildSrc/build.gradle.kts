@@ -26,7 +26,7 @@ repositories {
 }
 
 object PluginVersions {
-    const val gradle_plugin = "8.13.1"
+    const val gradle_plugin = "8.13.2"
     const val kotlin_gradle_plugin = "2.2.21"
     const val gradle_version_plugin = "0.53.0"
     const val detekt = "1.23.8"
