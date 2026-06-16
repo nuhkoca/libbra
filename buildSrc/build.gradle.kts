@@ -31,7 +31,7 @@ object PluginVersions {
     const val gradle_version_plugin = "0.54.0"
     const val detekt = "1.23.8"
     const val ktlint = "14.2.0"
-    const val spotless = "8.6.0"
+    const val spotless = "8.7.0"
     const val junit5 = "2.0.1"
 }
 
