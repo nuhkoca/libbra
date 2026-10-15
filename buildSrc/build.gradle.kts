@@ -32,7 +32,7 @@ object PluginVersions {
     const val detekt = "1.23.8"
     const val ktlint = "14.2.0"
     const val spotless = "8.10.4"
-    const val junit5 = "2.0.1"
+    const val junit5 = "2.0.2"
 }
 
 dependencies {
